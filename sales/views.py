@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponse
 
 from sales.forms import RegisterForm
 from sales.models import UserInfo
@@ -7,7 +7,19 @@ from sales.utils.hashlib_func import set_md5
 
 
 def login(request):
-    return render(request, 'login.html')
+    if request.method == 'GET':
+        return render(request, 'login.html')
+    elif request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        # 用.get会报错
+        if UserInfo.objects.filter(username=username, password=set_md5(password)):
+            return HttpResponse('ok')
+        else:
+            context = {
+                'error_msg': '用户名或者密码错误！'
+            }
+            return render(request, 'login.html', context)
 
 
 def register(request):

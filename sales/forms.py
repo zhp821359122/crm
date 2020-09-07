@@ -13,7 +13,7 @@ def moblie_validate(value):
 class RegisterForm(forms.Form):
     username = forms.CharField(
         max_length=16,
-        min_length=6,
+        min_length=3,
         label='用户名',
         widget=forms.widgets.TextInput(attrs={
             'class': 'username',  # 给它添加username属性

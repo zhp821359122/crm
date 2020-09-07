@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from login.views import login, register
+from sales.views import login, register
 
 urlpatterns = [
     url(r'^login/$', login, name='login'),

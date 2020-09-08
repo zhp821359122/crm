@@ -12,6 +12,6 @@ jQuery(function ($) {
         fit_portrait: 1,
         fit_landscape: 0,
         slide_links: 'blank',
-        slides: [{image: '/static/login/images/1.jpg'}, {image: '/static/login/images/2.jpg'}, {image: '/static/login/images/3.jpg'}]
+        slides: [{image: '/static/login/images/5.jpg'}, {image: '/static/login/images/6.jpg'}, {image: '/static/login/images/3.jpg'},{image: '/static/login/images/7.jpg'},{image: '/static/login/images/2.jpg'},{image: '/static/login/images/1.jpg'},]
     });
 });

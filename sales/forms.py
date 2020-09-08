@@ -23,7 +23,7 @@ class RegisterForm(forms.Form):
         error_messages={
             'required': '用户名不能为空',
             'max_length': '用户名不能大于16位',
-            'min_length': '用户名不能小于6位',
+            'min_length': '用户名不能小于3位',
         }
     )
     password = forms.CharField(

@@ -2,11 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c4598ffa-5ede-41c0-ba02-604f4bc9b32f" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/401be655-970a-4f9a-8207-07f75ed1b056.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/e94db17f-004e-49f2-b935-2bb5513474fb.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crm/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/crm/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sales/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/sales/admin.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sales/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/sales/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sales/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/sales/templates/base.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sales/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/sales/views.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -64,11 +64,11 @@
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="css" value="6" />
-          <entry key="html" value="21" />
+          <entry key="html" value="27" />
           <entry key="jpg" value="1" />
-          <entry key="js" value="41" />
+          <entry key="js" value="42" />
           <entry key="json" value="1" />
-          <entry key="py" value="43" />
+          <entry key="py" value="44" />
           <entry key="sales_userinfo" value="4" />
           <entry key="sql" value="3" />
         </counts>
@@ -77,29 +77,29 @@
         <counts>
           <entry key="CSS" value="6" />
           <entry key="Database Element" value="4" />
-          <entry key="HTML" value="21" />
+          <entry key="HTML" value="27" />
           <entry key="Image" value="1" />
           <entry key="JSON" value="1" />
-          <entry key="JavaScript" value="41" />
-          <entry key="Python" value="43" />
+          <entry key="JavaScript" value="42" />
+          <entry key="Python" value="44" />
           <entry key="Scratch" value="3" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="cell" value="3" />
-          <entry key="html" value="793" />
+          <entry key="html" value="1097" />
           <entry key="js" value="113" />
-          <entry key="py" value="5664" />
+          <entry key="py" value="6073" />
           <entry key="txt" value="9" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="HTML" value="793" />
+          <entry key="HTML" value="1097" />
           <entry key="JavaScript" value="113" />
           <entry key="PLAIN_TEXT" value="9" />
-          <entry key="Python" value="5664" />
+          <entry key="Python" value="6073" />
           <entry key="Scratch" value="3" />
         </counts>
       </usages-collector>
@@ -107,50 +107,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/sales/models.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="280">
-              <caret line="76" lean-forward="true" selection-start-line="76" selection-end-line="78" selection-end-column="35" />
-              <folding>
-                <element signature="e#0#28#0" expanded="true" />
-                <marker date="1599610740392" expanded="true" signature="1553:1554" ph="..." />
-                <marker date="1599610740392" expanded="true" signature="1553:1588" ph="..." />
-                <marker date="1599610740392" expanded="true" signature="1921:1926" ph="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/sales/views.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="364">
-              <caret line="16" column="47" lean-forward="true" selection-start-line="16" selection-start-column="47" selection-end-line="16" selection-end-column="47" />
-              <folding>
-                <element signature="e#0#59#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/sales/templates/index.html">
+        <entry file="file://$PROJECT_DIR$/sales/templates/customers.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="532">
-              <caret line="204" column="43" selection-start-line="204" selection-start-column="43" selection-end-line="204" selection-end-column="43" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/sales/admin.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="196">
-              <caret line="7" column="29" lean-forward="true" selection-start-line="7" selection-start-column="29" selection-end-line="7" selection-end-column="29" />
-              <folding>
-                <element signature="e#0#32#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="168">
+              <caret line="6" column="19" selection-start-line="6" selection-start-column="19" selection-end-line="6" selection-end-column="19" />
             </state>
           </provider>
         </entry>
@@ -160,8 +121,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="HTML File" />
         <option value="Python Script" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>
@@ -180,6 +141,7 @@
       <find>attendance_choices</find>
       <find>font-awesome.min.css</find>
       <find>Starter Pages</find>
+      <find>客户信息</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -198,7 +160,6 @@
         <option value="$PROJECT_DIR$/templates/login.html" />
         <option value="$PROJECT_DIR$/crm/__init__.py" />
         <option value="$PROJECT_DIR$/crm/settings.py" />
-        <option value="$PROJECT_DIR$/crm/urls.py" />
         <option value="$PROJECT_DIR$/statics/login/jquery.validate.min.js" />
         <option value="$PROJECT_DIR$/statics/login/style.css" />
         <option value="$PROJECT_DIR$/statics/login/supersized.3.2.7.min.js" />
@@ -209,10 +170,13 @@
         <option value="$PROJECT_DIR$/sales/forms.py" />
         <option value="$PROJECT_DIR$/statics/login/supersized-init.js" />
         <option value="$PROJECT_DIR$/sales/templates/starter.html" />
-        <option value="$PROJECT_DIR$/sales/admin.py" />
         <option value="$PROJECT_DIR$/sales/templates/index.html" />
         <option value="$PROJECT_DIR$/sales/models.py" />
+        <option value="$PROJECT_DIR$/sales/admin.py" />
+        <option value="$PROJECT_DIR$/crm/urls.py" />
         <option value="$PROJECT_DIR$/sales/views.py" />
+        <option value="$PROJECT_DIR$/sales/templates/customers.html" />
+        <option value="$PROJECT_DIR$/sales/templates/base.html" />
       </list>
     </option>
   </component>
@@ -282,8 +246,8 @@
       <recent name="C:\Users\Administrator\PycharmProjects\crm\templates\登陆丨Sharelink_files" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\Administrator\PycharmProjects\crm\sales\templates" />
       <recent name="C:\Users\Administrator\PycharmProjects\crm\statics" />
+      <recent name="C:\Users\Administrator\PycharmProjects\crm\sales\templates" />
       <recent name="C:\Users\Administrator\PycharmProjects\crm\statics\login\images" />
       <recent name="C:\Users\Administrator\PycharmProjects\crm\sales" />
       <recent name="C:\Users\Administrator\PycharmProjects\crm\templates" />
@@ -375,11 +339,11 @@
     </history-entry>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <frame x="-7" y="-7" width="1550" height="838" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="Favorites" order="0" side_tool="true" />
-      <window_info active="true" content_ui="combo" id="Project" order="1" visible="true" weight="0.2600536" />
+      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.2600536" />
       <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Database Changes" order="0" />
       <window_info anchor="bottom" id="Terminal" order="1" weight="0.32765958" />
@@ -389,7 +353,7 @@
       <window_info anchor="bottom" id="Docker" order="5" show_stripe_button="false" />
       <window_info anchor="bottom" id="Message" order="6" />
       <window_info anchor="bottom" id="Find" order="7" weight="0.32765958" />
-      <window_info anchor="bottom" id="Run" order="8" sideWeight="0.49932975" weight="0.24680851" />
+      <window_info active="true" anchor="bottom" id="Run" order="8" sideWeight="0.49932975" visible="true" weight="0.24680851" />
       <window_info anchor="bottom" id="Debug" order="9" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="10" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="11" weight="0.4" />
@@ -409,7 +373,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/templates/jquery-Sharelink20151012.html" />
     <entry file="file://$PROJECT_DIR$/templates/注册丨Sharelink_files/common.js" />
     <entry file="file://$PROJECT_DIR$/templates/注册丨Sharelink_files/注册丨Sharelink.html" />
     <entry file="file://$PROJECT_DIR$/manage.py">
@@ -479,17 +442,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/sales/__init__.py">
       <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/crm/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="280">
-          <caret line="24" selection-start-line="24" selection-end-line="24" />
-          <folding>
-            <element signature="e#0#636#1" />
-            <element signature="e#637#669#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../venv/Lib/site-packages/django/shortcuts.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -618,39 +570,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/sales/admin.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="196">
-          <caret line="7" column="29" lean-forward="true" selection-start-line="7" selection-start-column="29" selection-end-line="7" selection-end-column="29" />
-          <folding>
-            <element signature="e#0#32#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sales/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="280">
-          <caret line="76" lean-forward="true" selection-start-line="76" selection-end-line="78" selection-end-column="35" />
-          <folding>
-            <element signature="e#0#28#0" expanded="true" />
-            <marker date="1599610740392" expanded="true" signature="1553:1554" ph="..." />
-            <marker date="1599610740392" expanded="true" signature="1553:1588" ph="..." />
-            <marker date="1599610740392" expanded="true" signature="1921:1926" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sales/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="364">
-          <caret line="16" column="47" lean-forward="true" selection-start-line="16" selection-start-column="47" selection-end-line="16" selection-end-column="47" />
-          <folding>
-            <element signature="e#0#59#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/statics/dist/js/pages/dashboard.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="112">
@@ -662,6 +581,71 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="532">
           <caret line="204" column="43" selection-start-line="204" selection-start-column="43" selection-end-line="204" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/statics/bootstrap-3.3.7-dist/js/npm.js">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/crm/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="168">
+          <caret line="20" column="53" selection-start-line="20" selection-start-column="53" selection-end-line="20" selection-end-column="53" />
+          <folding>
+            <element signature="e#0#636#1" />
+            <element signature="e#637#669#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sales/admin.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="336">
+          <caret line="12" column="29" selection-start-line="12" selection-start-column="29" selection-end-line="12" selection-end-column="29" />
+          <folding>
+            <element signature="e#0#32#0" expanded="true" />
+            <marker date="1599612715524" expanded="true" signature="193:252" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sales/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="280">
+          <caret line="13" column="60" selection-start-line="13" selection-start-column="60" selection-end-line="13" selection-end-column="60" />
+          <folding>
+            <element signature="e#0#59#0" expanded="true" />
+            <marker date="1599613196022" expanded="true" signature="343:408" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sales/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="356">
+          <caret line="112" column="29" selection-start-line="112" selection-start-column="29" selection-end-line="112" selection-end-column="29" />
+          <folding>
+            <element signature="e#0#28#0" expanded="true" />
+            <marker date="1599611834969" expanded="true" signature="1553:1554" ph="..." />
+            <marker date="1599611834969" expanded="true" signature="1553:1588" ph="..." />
+            <marker date="1599611834969" expanded="true" signature="1831:1866" ph="..." />
+            <marker date="1599611834969" expanded="true" signature="1974:1979" ph="..." />
+            <marker date="1599611834969" expanded="true" signature="3996:4005" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sales/templates/base.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="185" column="26" selection-start-line="185" selection-start-column="26" selection-end-line="185" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sales/templates/customers.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="168">
+          <caret line="6" column="19" selection-start-line="6" selection-start-column="19" selection-end-line="6" selection-end-column="19" />
         </state>
       </provider>
     </entry>

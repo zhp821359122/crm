@@ -1,9 +1,17 @@
 from django.shortcuts import render, redirect, HttpResponse
 
 from sales.forms import RegisterForm
-from sales.models import UserInfo
+from sales.models import UserInfo, Customer
 from sales.utils.hashlib_func import set_md5
 # Create your views here.
+
+
+def customers(request):
+    customers_obj = Customer.objects.all()
+    context = {
+        'customers_obj': customers_obj,
+    }
+    return render(request, 'customers.html', context=context)
 
 
 def login(request):
@@ -14,7 +22,7 @@ def login(request):
         password = request.POST.get('password')
         # 用.get会报错
         if UserInfo.objects.filter(username=username, password=set_md5(password)):
-            return render(request, 'base.html')
+            return redirect('customers')
         else:
             context = {
                 'error_msg': '用户名或者密码错误！'

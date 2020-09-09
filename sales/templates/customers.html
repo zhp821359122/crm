@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<table class="table table-striped  table-hover ">
+
+    <tr class="active">
+        <th>id</th>
+        <th>QQ</th>
+        <th>客户名称</th>
+        <th>性别</th>
+        <th>报名状态</th>
+        <th>销售</th>
+    </tr>
+    {% for customer_obj in customers_obj %}
+        <tr class="active">
+            <td>{{ forloop.counter }}</td>
+            <td>{{ customer_obj.qq }}</td>
+            <td>{{ customer_obj.name }}</td>
+            <td>{{ customer_obj.get_sex_display }}</td>
+            <td>{{ customer_obj.get_status_display }}</td>
+            <td>{{ customer_obj.consultant }}</td>
+        </tr>
+    {% endfor %}
+
+</table>
+
+{% endblock %}

@@ -74,6 +74,9 @@ class UserInfo(models.Model):
     telephone = models.CharField(max_length=16)
     is_active = models.BooleanField(default=True)
 
+    def __str__(self):
+        return self.username
+
     class Meta:
         verbose_name = '用户表'
         verbose_name_plural = '用户表'
@@ -110,7 +113,7 @@ class Customer(models.Model):
     consultant = models.ForeignKey('UserInfo', verbose_name='销售',
                                    related_name='customers', blank=True,  # 这个related_name是什么
                                    null=True, on_delete=models.CASCADE)
-    class_list = models.ManyToManyField('ClassList', verbose_name='已报班级', )
+    class_list = models.ManyToManyField('ClassList', verbose_name='已报班级',  blank=True, null=True)
 
     def __str__(self):
         return self.name+':'+self.qq
@@ -153,4 +156,7 @@ class ClassList(models.Model):
         unique_together = ('course', 'semester', 'campuses')  # 定义联合唯一...
         verbose_name = '班级表'
         verbose_name_plural = '班级表'
+
+    def __str__(self):
+        return self.course + '-' + str(self.semester) + '-' + self.campuses.name
 

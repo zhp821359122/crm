@@ -38,6 +38,7 @@ if __name__ == '__main__':
             'class_type': random.choice(class_type_choices)[0],
             'status': random.choice(enroll_status_choices)[0],
         }
+        print(d)
         obj = models.Customer(**d)
         obj_list.append(obj)
     models.Customer.objects.bulk_create(obj_list)

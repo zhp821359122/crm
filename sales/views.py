@@ -7,7 +7,13 @@ from sales.utils.hashlib_func import set_md5
 
 
 def customers(request):
-    customers_obj = Customer.objects.all()
+    per_page_count = 10
+    page_num = request.GET.get('page')
+    if page_num:
+        customers_obj = Customer.objects.all()[int(page_num) * per_page_count:(int(
+            page_num) + 1) * per_page_count]  # [10:20]
+    else:
+        customers_obj = Customer.objects.all()[:per_page_count]  # [:10]
     context = {
         'customers_obj': customers_obj,
     }

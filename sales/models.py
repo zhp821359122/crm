@@ -113,7 +113,7 @@ class Customer(models.Model):
     consultant = models.ForeignKey('UserInfo', verbose_name='销售',
                                    related_name='customers', blank=True,  # 这个related_name是什么
                                    null=True, on_delete=models.CASCADE)
-    class_list = models.ManyToManyField('ClassList', verbose_name='已报班级',  blank=True, null=True)
+    class_list = models.ManyToManyField('ClassList', verbose_name='已报班级', blank=True)
 
     def __str__(self):
         return self.name+':'+self.qq

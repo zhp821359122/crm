@@ -74,6 +74,10 @@ class UserInfo(models.Model):
     telephone = models.CharField(max_length=16)
     is_active = models.BooleanField(default=True)
 
+    class Meta:
+        verbose_name = '用户表'
+        verbose_name_plural = '用户表'
+
 
 class Customer(models.Model):
     """
@@ -111,6 +115,10 @@ class Customer(models.Model):
     def __str__(self):
         return self.name+':'+self.qq
 
+    class Meta:
+        verbose_name = '客户表'
+        verbose_name_plural = '客户表'
+
 
 class Campuses(models.Model):
     """
@@ -121,6 +129,10 @@ class Campuses(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        verbose_name = '校区表'
+        verbose_name_plural = '校区表'
 
 
 class ClassList(models.Model):
@@ -139,3 +151,6 @@ class ClassList(models.Model):
 
     class Meta:
         unique_together = ('course', 'semester', 'campuses')  # 定义联合唯一...
+        verbose_name = '班级表'
+        verbose_name_plural = '班级表'
+

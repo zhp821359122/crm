@@ -14,7 +14,7 @@ def login(request):
         password = request.POST.get('password')
         # 用.get会报错
         if UserInfo.objects.filter(username=username, password=set_md5(password)):
-            return HttpResponse('ok')
+            return render(request, 'base.html')
         else:
             context = {
                 'error_msg': '用户名或者密码错误！'

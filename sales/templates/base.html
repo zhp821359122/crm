@@ -183,18 +183,21 @@
             <li class="nav-item ">
             <a href="{% url 'customers' %}" class="nav-link active">
                 <i class="fa fa-user-o"></i>
+                &nbsp;
                 <p>客户信息<i class="right fa fa-angle-right"></i></p>
             </a>
             </li>
 
              <li class="nav-item ">
             <a href="#" class="nav-link"><i class="fa fa-heart-o"></i>
-                <p>其他信息<i class="right fa fa-angle-right"></i></p></a>
+                &nbsp;
+                <p>我的客户<i class="right fa fa-angle-right"></i></p></a>
             </li>
 
           <li class="nav-item menu-open ">
             <a href="#" class="nav-link ">
               <i class="fa fa-reorder"></i>
+                &nbsp;
               <p>
                 Starter Pages
                 <i class="right fa fa-angle-left"></i>
@@ -289,5 +292,11 @@
 <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 <!-- AdminLTE App -->
 <script src="{% static 'dist/js/adminlte.min.js' %}"></script>
+<script>
+    $('nav.mt-2 ul li.nav-item a').on('click', function () {
+        $(this).parent().siblings().children('a').removeClass('active');
+        $(this).addClass('active');
+    })
+</script>
 </body>
 </html>

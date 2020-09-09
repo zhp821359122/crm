@@ -1,9 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
+
     <list default="true" id="c4598ffa-5ede-41c0-ba02-604f4bc9b32f" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/insert_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/insert_data.py" afterDir="false" />
     </list>
+
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -11,7 +13,9 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
+
     <SUITE FILE_PATH="coverage/crm$insert_data.coverage" NAME="insert_data Coverage Results" MODIFIED="1599618556406" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+
     <SUITE FILE_PATH="coverage/crm$test.coverage" NAME="test Coverage Results" MODIFIED="1599617746141" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/crm$Test__login.coverage" NAME="Test: login Coverage Results" MODIFIED="1599456554827" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
   </component>
@@ -87,7 +91,9 @@
           <entry key="cell" value="3" />
           <entry key="html" value="1305" />
           <entry key="js" value="113" />
+
           <entry key="py" value="6489" />
+
           <entry key="txt" value="9" />
         </counts>
       </usages-collector>
@@ -96,7 +102,9 @@
           <entry key="HTML" value="1305" />
           <entry key="JavaScript" value="113" />
           <entry key="PLAIN_TEXT" value="9" />
+
           <entry key="Python" value="6489" />
+
           <entry key="Scratch" value="3" />
         </counts>
       </usages-collector>
@@ -107,8 +115,10 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/insert_data.py">
           <provider selected="true" editor-type-id="text-editor">
+
             <state relative-caret-position="252">
               <caret line="39" column="9" selection-start-line="39" selection-start-column="9" selection-end-line="39" selection-end-column="9" />
+
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -379,7 +389,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
-    <editor active="true" />
+	<editor active="true" />
     <layout>
       <window_info id="Favorites" order="0" side_tool="true" />
       <window_info active="true" content_ui="combo" id="Project" order="1" visible="true" weight="0.2600536" />
@@ -392,7 +402,9 @@
       <window_info anchor="bottom" id="Docker" order="5" show_stripe_button="false" />
       <window_info anchor="bottom" id="Message" order="6" />
       <window_info anchor="bottom" id="Find" order="7" weight="0.32765958" />
+
       <window_info anchor="bottom" id="Run" order="8" sideWeight="0.49932975" visible="true" weight="0.34184396" />
+
       <window_info anchor="bottom" id="Debug" order="9" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="10" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="11" weight="0.4" />
@@ -708,6 +720,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="252">
           <caret line="39" column="9" selection-start-line="39" selection-start-column="9" selection-end-line="39" selection-end-column="9" />
+
           <folding>
             <element signature="e#0#9#0" expanded="true" />
           </folding>

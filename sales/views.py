@@ -1,22 +1,30 @@
 from django.shortcuts import render, redirect, HttpResponse
 from django.conf import settings
 
-from sales.forms import RegisterForm, AddCustomerForm
+from sales.forms import RegisterForm, CustomerForm
 from sales.models import UserInfo, Customer
 from sales.utils.hashlib_func import set_md5
 from sales.utils.page import MyPagination
 # Create your views here.
 
 
+# 编辑客户
+def edit_customer(request, cid):
+    # if request.method == 'GET':
+    #     customer_obj = Customer.objects.filter(id=cid).first()
+    #     CustomerForm
+    pass
+
+
 # 添加客户
 def add_customer(request):
     if request.method == 'GET':
         context = {
-            'add_customer_form_obj': AddCustomerForm
+            'add_customer_form_obj': CustomerForm
         }
         return render(request, 'add_customer.html', context)
     elif request.method == 'POST':
-        add_customer_form_obj = AddCustomerForm(request.POST)
+        add_customer_form_obj = CustomerForm(request.POST)
         if add_customer_form_obj.is_valid():
             add_customer_form_obj.save()
             return redirect('customers')
@@ -49,7 +57,7 @@ def customers(request):
 
     html = MyPagination(page_num, total_page, page_range_count, request.path).get_html()  # 分页组件
     # 倒序排列 [0:10]
-    customers_obj = Customer.objects.all().order_by('-id')[(page_num - 1) * per_page_count:page_num * per_page_count]  
+    customers_obj = Customer.objects.all().order_by('-id')[(page_num - 1) * per_page_count:page_num * per_page_count]
 
     context = {
         'customers_obj': customers_obj,

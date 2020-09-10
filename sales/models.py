@@ -104,7 +104,7 @@ class Customer(models.Model):
     status = models.CharField(
         '状态',
         choices=enroll_status_choices,
-        max_length=64, default='unregister',
+        max_length=64, default='unsigned',
         help_text='选择客户此时的状态',  # help_text 是针对admin应用里的
     )
     date = models.DateTimeField('咨询日期', auto_now_add=True)
@@ -116,7 +116,7 @@ class Customer(models.Model):
     class_list = models.ManyToManyField('ClassList', verbose_name='已报班级', blank=True)
 
     def __str__(self):
-        return self.name+':'+self.qq
+        return str(self.name) + ':'+self.qq
 
     class Meta:
         verbose_name = '客户表'

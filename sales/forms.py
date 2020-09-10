@@ -7,7 +7,7 @@ from multiselectfield.forms.fields import MultiSelectFormField
 
 
 # 添加客户页面的ModelForm ModelForm要指定model 直接自动帮你生成 你只需要修改
-class AddCustomerForm(forms.ModelForm):
+class CustomerForm(forms.ModelForm):
     class Meta:
         model = Customer
         fields = '__all__'
@@ -21,7 +21,7 @@ class AddCustomerForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
-        super(AddCustomerForm, self).__init__(*args, **kwargs)
+        super(CustomerForm, self).__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
             if not isinstance(field, MultiSelectFormField):
                 field.widget.attrs.update({'class': 'form-control'})

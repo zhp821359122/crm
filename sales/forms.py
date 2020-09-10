@@ -2,6 +2,30 @@ import re
 from django import forms
 from django.core.exceptions import ValidationError
 
+from sales.models import Customer
+from multiselectfield.forms.fields import MultiSelectFormField
+
+
+# 添加客户页面的ModelForm ModelForm要指定model 直接自动帮你生成 你只需要修改
+class AddCustomerForm(forms.ModelForm):
+    class Meta:
+        model = Customer
+        fields = '__all__'
+        error_messages = {
+            'qq': {'required': 'QQ号码不能为空！！！'},
+            'course': {'required': '咨询课程不能为空！！！'},
+        }
+        widgets = {
+            'birthday': forms.widgets.DateInput(attrs={'value': '1999-05-19'}),
+            'phone': forms.widgets.TextInput(attrs={'value': '12345678910'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(AddCustomerForm, self).__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            if not isinstance(field, MultiSelectFormField):
+                field.widget.attrs.update({'class': 'form-control'})
+
 
 # 自定义校验函数 校验手机号码
 def moblie_validate(value):
@@ -10,6 +34,7 @@ def moblie_validate(value):
         raise ValidationError('手机号码格式错误')
 
 
+# 注册页面的Form From不用指定model 你自己定义字段
 class RegisterForm(forms.Form):
     username = forms.CharField(
         max_length=16,

@@ -15,9 +15,12 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from sales.views import login, register, customers
+from sales.views import login, register, customers, add_customer
 
 urlpatterns = [
+    #  添加客户
+    url(r'^add_customer', add_customer, name='add_customer'),
+    #  展示客户
     url(r'^customers/', customers, name='customers'),
     url(r'^login/$', login, name='login'),
     url(r'^register/$', register, name='register'),

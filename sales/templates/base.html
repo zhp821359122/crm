@@ -12,7 +12,8 @@
   <!-- Theme style -->
      <link rel="stylesheet" href="{% static 'dist/css/adminlte.min.css' %}">
 {#    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">#}
-
+    {% block head %}
+    {% endblock %}
 </head>
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
@@ -301,5 +302,7 @@
         $(this).addClass('active');
     })
 </script>
+{% block script %}
+{% endblock %}
 </body>
 </html>

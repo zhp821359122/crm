@@ -1,13 +1,33 @@
 from django.shortcuts import render, redirect, HttpResponse
 from django.conf import settings
 
-from sales.forms import RegisterForm
+from sales.forms import RegisterForm, AddCustomerForm
 from sales.models import UserInfo, Customer
 from sales.utils.hashlib_func import set_md5
 from sales.utils.page import MyPagination
 # Create your views here.
 
 
+# 添加客户
+def add_customer(request):
+    if request.method == 'GET':
+        context = {
+            'add_customer_form_obj': AddCustomerForm
+        }
+        return render(request, 'add_customer.html', context)
+    elif request.method == 'POST':
+        add_customer_form_obj = AddCustomerForm(request.POST)
+        if add_customer_form_obj.is_valid():
+            add_customer_form_obj.save()
+            return redirect('customers')
+        else:
+            context = {
+                'add_customer_form_obj': add_customer_form_obj
+            }
+            return render(request, 'add_customer.html', context)
+
+
+# 展示客户
 def customers(request):
     per_page_count = settings.PER_PAGE_COUNT  # per_page_count每页加载的客户数量
     page_range_count = settings.PAGE_RANGE_COUNT  # page_range_count分页组件加载的页码数
@@ -28,7 +48,8 @@ def customers(request):
         page_num = total_page
 
     html = MyPagination(page_num, total_page, page_range_count, request.path).get_html()  # 分页组件
-    customers_obj = Customer.objects.all()[(page_num - 1) * per_page_count:page_num * per_page_count]  # [0:10]
+    # 倒序排列 [0:10]
+    customers_obj = Customer.objects.all().order_by('-id')[(page_num - 1) * per_page_count:page_num * per_page_count]  
 
     context = {
         'customers_obj': customers_obj,

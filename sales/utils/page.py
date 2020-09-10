@@ -24,7 +24,8 @@ class MyPagination(object):
 
     def get_html(self):
         html = ''
-        html += '<nav aria-label="Page navigation"><ul class="pagination">'
+        # class ="text-center" 让分页组件居中
+        html += '<nav aria-label="Page navigation" class="text-center"><ul class="pagination">'
         html += '<li><a href="{}?page=1" aria-label="First">'.format(self.base_url)
         html += '<span aria-hidden="true">&laquo;</span></a></li>'
         for page in self.page_range:  # 由于数字不能在模板中for循环 所以得先弄个可迭代对象出来 用range左闭右开

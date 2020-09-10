@@ -8,43 +8,24 @@ from sales.utils.page import MyPagination
 # Create your views here.
 
 
-# 编辑客户
-def edit_customer(request, cid):
-    customer_obj = Customer.objects.filter(id=cid).first()
+# 添加和编辑客户 合在一起的视图 其实就是编辑客户的一模一样的代码 添加客户也使用 所以就合起来了
+def add_edit_customer(request, cid=None):  # 编辑客户时需要带id值 当走的是添加客户的url时cid默认是None
+    customer_obj = Customer.objects.filter(id=cid).first()  # 如果是添加则customer_obj 是 None
     if request.method == 'GET':
-        form_obj = CustomerForm(instance=customer_obj)
+        form_obj = CustomerForm(instance=customer_obj)  # 如果是添加客户 则实例化一个空对象
         context = {
             'form_obj': form_obj,
         }
         #  编辑页面这里用的是add_customer.html 共用一套页面
         return render(request, 'add_customer.html', context)
     elif request.method == 'POST':
-        form_obj = CustomerForm(request.POST, instance=customer_obj)
+        form_obj = CustomerForm(request.POST, instance=customer_obj)  # 如果是添加客户则instance是None
         if form_obj.is_valid():
             form_obj.save()
             return redirect('customers')
         else:
             context = {
                 'form_obj': form_obj,
-            }
-            return render(request, 'add_customer.html', context)
-
-
-# 添加客户
-def add_customer(request):
-    if request.method == 'GET':
-        context = {
-            'form_obj': CustomerForm
-        }
-        return render(request, 'add_customer.html', context)
-    elif request.method == 'POST':
-        add_customer_form_obj = CustomerForm(request.POST)
-        if add_customer_form_obj.is_valid():
-            add_customer_form_obj.save()
-            return redirect('customers')
-        else:
-            context = {
-                'form_obj': add_customer_form_obj
             }
             return render(request, 'add_customer.html', context)
 

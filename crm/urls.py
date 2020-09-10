@@ -15,13 +15,13 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from sales.views import login, register, customers, add_customer, edit_customer
+from sales.views import login, register, customers, add_edit_customer
 
 urlpatterns = [
-    # 编辑客户
-    url(r'^edit_customer/(\d+)', edit_customer, name='edit_customer'),
+    # 编辑客户 两个url同时匹配同一个视图函数进行处理
+    url(r'^edit_customer/(\d+)', add_edit_customer, name='edit_customer'),
     #  添加客户
-    url(r'^add_customer/', add_customer, name='add_customer'),
+    url(r'^add_customer/', add_edit_customer, name='add_customer'),
     #  展示客户
     url(r'^customers/', customers, name='customers'),
     url(r'^login/$', login, name='login'),

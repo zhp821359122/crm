@@ -131,3 +131,6 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'statics')
 ]
+
+PER_PAGE_COUNT = 10  # per_page_count每页加载的客户数量
+PAGE_RANGE_COUNT = 7    # page_range_count分页组件加载的页码数

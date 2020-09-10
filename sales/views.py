@@ -1,45 +1,38 @@
 from django.shortcuts import render, redirect, HttpResponse
+from django.conf import settings
 
 from sales.forms import RegisterForm
 from sales.models import UserInfo, Customer
 from sales.utils.hashlib_func import set_md5
+from sales.utils.page import MyPagination
 # Create your views here.
 
 
 def customers(request):
-    per_page_count = 10
-    page_num = request.GET.get('page')
-    total_count = Customer.objects.count()
+    per_page_count = settings.PER_PAGE_COUNT  # per_page_count每页加载的客户数量
+    page_range_count = settings.PAGE_RANGE_COUNT  # page_range_count分页组件加载的页码数
+    page_num = request.GET.get('page')  # page_num当前请求的页码数
+    total_count = Customer.objects.count()  # total_count客户的总个数
     shang, yu = divmod(total_count, per_page_count)
     if yu:
-        total_page = shang + 1
+        total_page = shang + 1  # total_page总页码数
     else:
         total_page = shang
-    page_range_count = 7
+    try:
+        page_num = int(page_num)  # 先转成int型 如果输入的不是数字就把它转成1
+    except Exception:
+        page_num = 1
+    if page_num <= 0:  # 如果输入的页码过小重置
+        page_num = 1
+    elif page_num > total_page:  # 如果输入的页码过大重置
+        page_num = total_page
 
-    if page_num:
-        try:
-            page_num = int(page_num)  # 先转成int型 如果输入的不是数字就把它转成1
-        except Exception:
-            page_num = 1
-        if page_num <= 0:  # 如果输入的页码过小重置
-            page_num = 1
-        elif page_num > total_page:  # 如果输入的页码过大重置
-            page_num = total_page
-        if page_num <= int(page_range_count/2):
-            page_range = range(1, page_range_count+1)
-        elif page_num >= (total_page-int(page_range_count/2)):
-            page_range = range(total_page-page_range_count, total_page+1)
-        else:
-            page_range = range(page_num-3, page_num+4)
-        customers_obj = Customer.objects.all()[(page_num-1) * per_page_count:page_num * per_page_count]  # [0:10]
-    else:
-        customers_obj = Customer.objects.all()[:per_page_count]  # [:10]
-        page_range = range(1, page_range_count+1)
+    html = MyPagination(page_num, total_page, page_range_count, request.path).get_html()  # 分页组件
+    customers_obj = Customer.objects.all()[(page_num - 1) * per_page_count:page_num * per_page_count]  # [0:10]
+
     context = {
         'customers_obj': customers_obj,
-        'page_range': page_range,  # 由于数字不能在模板中for循环 所以得先弄个可迭代对象出来 用range左闭右开
-        'last': total_page,  # 这个是用来给最后一页的标签传值用的
+        'pagination': html,
     }
     return render(request, 'customers.html', context=context)
 

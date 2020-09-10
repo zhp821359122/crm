@@ -10,17 +10,31 @@ from sales.utils.page import MyPagination
 
 # 编辑客户
 def edit_customer(request, cid):
-    # if request.method == 'GET':
-    #     customer_obj = Customer.objects.filter(id=cid).first()
-    #     CustomerForm
-    pass
+    customer_obj = Customer.objects.filter(id=cid).first()
+    if request.method == 'GET':
+        form_obj = CustomerForm(instance=customer_obj)
+        context = {
+            'form_obj': form_obj,
+        }
+        #  编辑页面这里用的是add_customer.html 共用一套页面
+        return render(request, 'add_customer.html', context)
+    elif request.method == 'POST':
+        form_obj = CustomerForm(request.POST, instance=customer_obj)
+        if form_obj.is_valid():
+            form_obj.save()
+            return redirect('customers')
+        else:
+            context = {
+                'form_obj': form_obj,
+            }
+            return render(request, 'add_customer.html', context)
 
 
 # 添加客户
 def add_customer(request):
     if request.method == 'GET':
         context = {
-            'add_customer_form_obj': CustomerForm
+            'form_obj': CustomerForm
         }
         return render(request, 'add_customer.html', context)
     elif request.method == 'POST':
@@ -30,7 +44,7 @@ def add_customer(request):
             return redirect('customers')
         else:
             context = {
-                'add_customer_form_obj': add_customer_form_obj
+                'form_obj': add_customer_form_obj
             }
             return render(request, 'add_customer.html', context)
 

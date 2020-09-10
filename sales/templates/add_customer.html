@@ -8,7 +8,7 @@
 {#        这个前端css样式真的吐了...页面本身css和bootstrap各种冲突...凑合用用 把功能实现了再说 #}
        <form class="form-horizontal" novalidate method="post">
        {% csrf_token %}
-        {% for field in add_customer_form_obj %}
+        {% for field in form_obj %}
                  <div class="form-group">
                 <label for="{{ field.id_for_label }}" class="col-sm-2 control-label">{{ field.label }}</label>
                 <div class="col-sm-6">

@@ -20,7 +20,7 @@
             <td>{{ customer_obj.qq }}</td>
             <td>{{ customer_obj.name }}</td>
             <td>{{ customer_obj.get_sex_display }}</td>
-            <td>{{ customer_obj.get_status_display }}</td>
+            <td>{{ customer_obj.get_status_show }}</td>
             <td>{{ customer_obj.consultant }}</td>
             <td><li class="fa fa-edit"><a href="{% url 'edit_customer' customer_obj.pk %}">编辑</a></li></td>
         </tr>

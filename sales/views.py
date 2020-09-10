@@ -10,11 +10,16 @@ from sales.utils.page import MyPagination
 
 # 添加和编辑客户 合在一起的视图 其实就是编辑客户的一模一样的代码 添加客户也使用 所以就合起来了
 def add_edit_customer(request, cid=None):  # 编辑客户时需要带id值 当走的是添加客户的url时cid默认是None
+    if cid:
+        content_title = '编辑客户'
+    else:
+        content_title = '添加客户'
     customer_obj = Customer.objects.filter(id=cid).first()  # 如果是添加则customer_obj 是 None
     if request.method == 'GET':
         form_obj = CustomerForm(instance=customer_obj)  # 如果是添加客户 则实例化一个空对象
         context = {
             'form_obj': form_obj,
+            'context_title': content_title,
         }
         #  编辑页面这里用的是add_customer.html 共用一套页面
         return render(request, 'add_customer.html', context)
@@ -26,6 +31,7 @@ def add_edit_customer(request, cid=None):  # 编辑客户时需要带id值 当�
         else:
             context = {
                 'form_obj': form_obj,
+                'context_title': content_title,
             }
             return render(request, 'add_customer.html', context)
 

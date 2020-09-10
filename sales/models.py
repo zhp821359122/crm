@@ -1,5 +1,7 @@
 from django.db import models
 from multiselectfield import MultiSelectField
+
+from django.utils.safestring import mark_safe
 # Create your models here.
 course_choices = (('LinuxL',  'Linux中高级'),
                   ('PythonFullStack', 'Python全栈高级'),)
@@ -121,6 +123,17 @@ class Customer(models.Model):
     class Meta:
         verbose_name = '客户表'
         verbose_name_plural = '客户表'
+
+    @property
+    def get_status_show(self):
+        color_dict = {
+              'signed': 'lightblue',
+              'unsigned': 'red',
+              'studying': 'lightgreen',
+              'paid_in_full': 'lightgreen',
+        }
+        html = '<span style="background-color:{}">{}</span>'.format(color_dict[self.status],  self.get_status_display())
+        return mark_safe(html)
 
 
 class Campuses(models.Model):

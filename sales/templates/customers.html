@@ -8,14 +8,22 @@
 
 <a href="{% url 'add_customer' %}"><button type="button" class="btn btn-primary" style="margin-bottom: 10px">添加客户</button></a>
     <form class="form-inline" style="margin-bottom: 10px" method="get">
-    <select class="form-control" name="search_field">
+    <select class="form-control" name="search_field" >
        <option value="">选择搜索字段</option>
-  <option value="qq">QQ</option>
-  <option value="name">客户名称</option>
+        {% if search_field == 'qq' %}
+             <option value="qq" selected>QQ</option>
+             <option value="name">客户名称</option>
+            {% elif search_field == 'name' %}
+            <option value="qq" >QQ</option>
+             <option value="name" selected>客户名称</option>
+            {% else %}
+             <option value="qq" >QQ</option>
+             <option value="name">客户名称</option>
+        {% endif %}
 </select>
         <span>&nbsp;</span>
   <div class="form-group">
-    <input name='kw' class="form-control"  placeholder="输入搜索条件">
+    <input name='kw' class="form-control"  placeholder="输入搜索条件" value="{{ kw }}">
   </div>
   <button type="submit" class="btn btn-default">搜索</button>
 </form>

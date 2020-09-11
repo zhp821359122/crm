@@ -41,6 +41,11 @@ def customers(request):
     search_field = request.GET.get('search_field')
     kw = request.GET.get('kw')  # 搜索条件
     if kw and search_field:
+        # 原始搜索条件没有加__contains的字典 最后加到context里面 然后渲染到页面中保留搜索框的内容
+        search_dict = {
+            'search_field': search_field,
+            'kw': kw,
+        }
         search_field += '__contains'
         kw = kw.strip()
         customers_obj = Customer.objects.filter(**{search_field: kw})  # 变量想作为参数只能先做成一个字典
@@ -73,6 +78,9 @@ def customers(request):
         'customers_obj': customers_obj,
         'pagination': html,
     }
+    # 如果有搜索条件把搜索条件的字典添加到context里
+    if search_field and kw:
+        context.update(search_dict)
     return render(request, 'customers.html', context=context)
 
 

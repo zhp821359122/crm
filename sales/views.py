@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, HttpResponse
+from django.shortcuts import render, redirect, HttpResponse, reverse
 from django.conf import settings
 
 from sales.forms import RegisterForm, CustomerForm
@@ -38,6 +38,14 @@ def add_edit_customer(request, cid=None):  # 编辑客户时需要带id值 当�
 
 # 展示客户
 def customers(request):
+    if request.path == reverse('customers'):
+        # 如果是customer这个url过来的请求 就只能查看公户信息
+        customers_obj = Customer.objects.filter(consultant=None)
+    else:
+        # 如果是my_customer这个url过来的请求 就只能查看私户信息
+        print(request.session.get('user_id'))
+        user_obj = UserInfo.objects.get(id=request.session.get('user_id'))
+        customers_obj = Customer.objects.filter(consultant=user_obj)
     search_field = request.GET.get('search_field')
     kw = request.GET.get('kw')  # 搜索条件
     if kw and search_field:
@@ -48,9 +56,9 @@ def customers(request):
         }
         search_field += '__contains'
         kw = kw.strip()
-        customers_obj = Customer.objects.filter(**{search_field: kw})  # 变量想作为参数只能先做成一个字典
+        customers_obj = customers_obj.filter(**{search_field: kw})  # 变量想作为参数只能先做成一个字典
     else:
-        customers_obj = Customer.objects.all()
+        customers_obj = customers_obj
     per_page_count = settings.PER_PAGE_COUNT  # per_page_count每页加载的客户数量
     page_range_count = settings.PAGE_RANGE_COUNT  # page_range_count分页组件加载的页码数
     page_num = request.GET.get('page')  # page_num当前请求的页码数
@@ -92,6 +100,8 @@ def login(request):
         password = request.POST.get('password')
         # 用.get会报错
         if UserInfo.objects.filter(username=username, password=set_md5(password)):
+            # 登录成功 将用户信息保存到session中
+            request.session['user_id'] = UserInfo.objects.get(username=username, password=set_md5(password)).id
             return redirect('customers')
         else:
             context = {

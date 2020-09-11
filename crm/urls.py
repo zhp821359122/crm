@@ -18,13 +18,19 @@ from django.contrib import admin
 from sales.views import login, register, customers, add_edit_customer
 
 urlpatterns = [
+    # 我的客户 走的也是customer视图逻辑一样 就是url不同
+    url(r'^my_customers/', customers, name='my_customers'),
     # 编辑客户 两个url同时匹配同一个视图函数进行处理
     url(r'^edit_customer/(\d+)', add_edit_customer, name='edit_customer'),
     #  添加客户
     url(r'^add_customer/', add_edit_customer, name='add_customer'),
     #  展示客户
     url(r'^customers/', customers, name='customers'),
+
     url(r'^login/$', login, name='login'),
+    url(r'^$', login, name='login'),
+
     url(r'^register/$', register, name='register'),
+
     url(r'^admin/', admin.site.urls),
 ]

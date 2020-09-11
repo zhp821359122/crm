@@ -64,7 +64,7 @@ def customers(request):
     elif page_num > total_page:  # 如果输入的页码过大重置
         page_num = total_page
 
-    html = MyPagination(page_num, total_page, page_range_count, request.path).get_html()  # 分页组件
+    html = MyPagination(request, page_num, total_page, page_range_count, request.path).get_html()  # 分页组件
     # 倒序排列 [0:10]
     if customers_obj:  # 如果没有搜索条件匹配的结果就不用取索引了 否则会报错
         customers_obj = customers_obj.order_by('-id')[(page_num - 1) * per_page_count:page_num * per_page_count]

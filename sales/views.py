@@ -17,23 +17,18 @@ def add_edit_customer(request, cid=None):  # 编辑客户时需要带id值 当�
     customer_obj = Customer.objects.filter(id=cid).first()  # 如果是添加则customer_obj 是 None
     if request.method == 'GET':
         form_obj = CustomerForm(instance=customer_obj)  # 如果是添加客户 则实例化一个空对象
-        context = {
-            'form_obj': form_obj,
-            'context_title': content_title,
-        }
-        #  编辑页面这里用的是add_customer.html 共用一套页面
-        return render(request, 'add_customer.html', context)
     elif request.method == 'POST':
         form_obj = CustomerForm(request.POST, instance=customer_obj)  # 如果是添加客户则instance是None
         if form_obj.is_valid():
             form_obj.save()
             return redirect('customers')
-        else:
-            context = {
-                'form_obj': form_obj,
-                'context_title': content_title,
-            }
-            return render(request, 'add_customer.html', context)
+    user_name = UserInfo.objects.get(id=request.session.get('user_id')).username
+    context = {
+        'form_obj': form_obj,
+        'content_title': content_title,  # base.html中必传的参数
+        'user_name': user_name,  # base.html中必传的参数
+    }
+    return render(request, 'add_customer.html', context)
 
 
 # 展示客户
@@ -53,11 +48,15 @@ def customers(request):
                 c_obj.update(consultant=None)
         return redirect(request.get_full_path())  # 转换后直接返回至原来页面 第几页和查询条件都不变 牛逼啊
     else:
+        # 模板中的暂占位符在base.html中
+        user_name = UserInfo.objects.get(id=request.session.get('user_id')).username  # 用户名字 用来渲染到页面
         # 如果是GET请求则展示客户 也可以封装成一个类。
         if request.path == reverse('customers'):
             # 如果是customer这个url过来的请求 就只能查看公户信息
             customers_obj = Customer.objects.filter(consultant=None)
+            content_title = '所有公户'  # 这里是content内容的标题
         else:
+            content_title = '我的客户'
             # 如果是my_customer这个url过来的请求 就只能查看私户信息
             user_obj = UserInfo.objects.get(id=request.session.get('user_id'))
             customers_obj = Customer.objects.filter(consultant=user_obj)
@@ -100,6 +99,8 @@ def customers(request):
         context = {
             'customers_obj': customers_obj,
             'pagination': html,
+            'content_title': content_title,  # base.html中必传的参数
+            'user_name': user_name,  # base.html中必传的参数
         }
         # 如果有搜索条件把搜索条件的字典添加到context里
         if search_field and kw:

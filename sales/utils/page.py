@@ -17,6 +17,9 @@ class MyPagination(object):
             page_range = range(total_page - page_range_count, total_page + 1)
         else:
             page_range = range(page_num - 3, page_num + 4)
+        #  如果总的页码数小于分页组件中默认加载的页码数量 7
+        if total_page < page_range_count:
+            page_range = range(1, total_page+1)
         self.page_num = page_num
         self.page_range = page_range
         self.total_page = total_page

@@ -38,10 +38,18 @@ def add_edit_customer(request, cid=None):  # 编辑客户时需要带id值 当�
 
 # 展示客户
 def customers(request):
+    search_field = request.GET.get('search_field')
+    kw = request.GET.get('kw')  # 搜索条件
+    if kw and search_field:
+        search_field += '__contains'
+        kw = kw.strip()
+        customers_obj = Customer.objects.filter(**{search_field: kw})  # 变量想作为参数只能先做成一个字典
+    else:
+        customers_obj = Customer.objects.all()
     per_page_count = settings.PER_PAGE_COUNT  # per_page_count每页加载的客户数量
     page_range_count = settings.PAGE_RANGE_COUNT  # page_range_count分页组件加载的页码数
     page_num = request.GET.get('page')  # page_num当前请求的页码数
-    total_count = Customer.objects.count()  # total_count客户的总个数
+    total_count = customers_obj.count()  # total_count 搜索条件下客户的总个数
     shang, yu = divmod(total_count, per_page_count)
     if yu:
         total_page = shang + 1  # total_page总页码数
@@ -58,7 +66,8 @@ def customers(request):
 
     html = MyPagination(page_num, total_page, page_range_count, request.path).get_html()  # 分页组件
     # 倒序排列 [0:10]
-    customers_obj = Customer.objects.all().order_by('-id')[(page_num - 1) * per_page_count:page_num * per_page_count]
+    if customers_obj:  # 如果没有搜索条件匹配的结果就不用取索引了 否则会报错
+        customers_obj = customers_obj.order_by('-id')[(page_num - 1) * per_page_count:page_num * per_page_count]
 
     context = {
         'customers_obj': customers_obj,

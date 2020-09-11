@@ -43,7 +43,6 @@ def customers(request):
         customers_obj = Customer.objects.filter(consultant=None)
     else:
         # 如果是my_customer这个url过来的请求 就只能查看私户信息
-        print(request.session.get('user_id'))
         user_obj = UserInfo.objects.get(id=request.session.get('user_id'))
         customers_obj = Customer.objects.filter(consultant=user_obj)
     search_field = request.GET.get('search_field')

@@ -21,7 +21,12 @@ def add_edit_customer(request, cid=None):  # 编辑客户时需要带id值 当�
         form_obj = CustomerForm(request.POST, instance=customer_obj)  # 如果是添加客户则instance是None
         if form_obj.is_valid():
             form_obj.save()
-            return redirect('customers')
+            if cid:
+                # 如果是编辑客户（cid存在） 则跳转至点击编辑之前的完整url 注意此时的url是form表单默认为空时携带了参数的原url 所以可以直接取值 牛逼！
+                return redirect(request.get_full_path().split('next=')[-1])
+            else:
+                # 如果是添加客户（cid不存在） 则跳转至展示客户页面
+                return redirect('customers')
     context = {
         'form_obj': form_obj,
         'content_title': content_title,  # base.html中必传的参数

@@ -35,7 +35,7 @@ def customers(request):
         # 如果是POST请求则是进行公私户转换
         option = request.POST.get('options')
         cids = request.POST.getlist('cids')  # 注意这里要用getlist！！！
-        u_obj = request.user
+        u_obj = request.user_obj
         if option and cids:
             c_obj = Customer.objects.filter(id__in=cids)
             if option == 'reverse_gs':
@@ -54,7 +54,7 @@ def customers(request):
         else:
             content_title = '我的客户'
             # 如果是my_customer这个url过来的请求 就只能查看私户信息
-            user_obj = request.user
+            user_obj = request.user_obj
             customers_obj = Customer.objects.filter(consultant=user_obj)
         search_field = request.GET.get('search_field')
         kw = request.GET.get('kw')  # 搜索条件

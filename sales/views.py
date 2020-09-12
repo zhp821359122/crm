@@ -22,11 +22,9 @@ def add_edit_customer(request, cid=None):  # 编辑客户时需要带id值 当�
         if form_obj.is_valid():
             form_obj.save()
             return redirect('customers')
-    user_name = request.user.username
     context = {
         'form_obj': form_obj,
         'content_title': content_title,  # base.html中必传的参数
-        'user_name': user_name,  # base.html中必传的参数
     }
     return render(request, 'add_customer.html', context)
 
@@ -48,8 +46,6 @@ def customers(request):
                 c_obj.update(consultant=None)
         return redirect(request.get_full_path())  # 转换后直接返回至原来页面 第几页和查询条件都不变 牛逼啊
     else:
-        # 用户名字 用来渲染到页面
-        user_name = request.user.username
         # 如果是GET请求则展示客户 也可以封装成一个类。
         if request.path == reverse('customers'):
             # 如果是customer这个url过来的请求 就只能查看公户信息
@@ -100,7 +96,6 @@ def customers(request):
             'customers_obj': customers_obj,
             'pagination': html,
             'content_title': content_title,  # base.html中必传的参数
-            'user_name': user_name,  # base.html中必传的参数
         }
         # 如果有搜索条件把搜索条件的字典添加到context里
         if search_field and kw:

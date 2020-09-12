@@ -48,6 +48,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'sales.utils.mymiddlewares.AuthMiddleWare',
 ]
 
 ROOT_URLCONF = 'crm.urls'

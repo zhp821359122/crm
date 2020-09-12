@@ -48,8 +48,8 @@ def customers(request):
                 c_obj.update(consultant=None)
         return redirect(request.get_full_path())  # 转换后直接返回至原来页面 第几页和查询条件都不变 牛逼啊
     else:
-        # 模板中的暂占位符在base.html中
-        user_name = UserInfo.objects.get(id=request.session.get('user_id')).username  # 用户名字 用来渲染到页面
+        # 用户名字 用来渲染到页面
+        user_name = UserInfo.objects.get(id=request.session.get('user_id')).username
         # 如果是GET请求则展示客户 也可以封装成一个类。
         if request.path == reverse('customers'):
             # 如果是customer这个url过来的请求 就只能查看公户信息

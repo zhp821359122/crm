@@ -40,16 +40,16 @@ enroll_status_choices = (
 #     (-1000, 'FAIL'),
 # )
 #
-# seek_status_choices = (
-#     ('A', '近期无报名计划'),
-#     ('B', '1个月内报名'),
-#     ('C', '2周内报名'),
-#     ('D', '1周内报名'),
-#     ('E', '定金'),
-#     ('F', '到班'),
-#     ('G', '全款'),
-#     ('H', '无效'),
-# )
+seek_status_choices = (
+    ('A', '近期无报名计划'),
+    ('B', '1个月内报名'),
+    ('C', '2周内报名'),
+    ('D', '1周内报名'),
+    ('E', '定金'),
+    ('F', '到班'),
+    ('G', '全款'),
+    ('H', '无效'),
+)
 # pay_type_choices = (
 #     ('deposite', '订金/报名费'),
 #     ('tuition', '学费'),
@@ -66,6 +66,60 @@ enroll_status_choices = (
 # )
 
 
+class Enrollment(models.Model):
+    """
+    报名表
+    """
+    why_us = models.TextField('为什么报名', max_length=1024, default=None, blank=True, null=True)
+    your_expectation = models.TextField('学完想达到的具体期望', max_length=1024, blank=True, null=True)
+    contract_approved = models.BooleanField('审批通过', help_text='在审阅完学员的资料无误后勾选此项，合同即生效', default=False)
+    enrolled_date = models.DateTimeField(auto_now_add=True, verbose_name='报名日期')
+    memo = models.CharField('备注', max_length=64, blank=True, null=True)
+    delete_status = models.BooleanField('删除状态', default=False)
+    customer = models.ForeignKey('Customer', verbose_name='客户名称')
+    school = models.ForeignKey('Campuses')
+    enrolment_class = models.ForeignKey('ClassList', verbose_name='所报班级')
+
+    class Meta:
+        unique_together = ('enrolment_class', 'customer')
+        verbose_name = '报名表'
+        verbose_name_plural = '报名表'
+
+
+class ConsultRecord(models.Model):
+    """
+    跟进记录表
+    """
+    customer = models.ForeignKey('Customer', verbose_name='所咨询客户')
+    note = models.TextField(verbose_name='跟进内容')
+    status = models.CharField('跟进状态', max_length=8, choices=seek_status_choices, help_text='选择客户此时的状态')
+    consultant = models.ForeignKey('UserInfo', verbose_name='跟进人', related_name='records')  # related_name 是什么
+    date = models.DateTimeField('跟进日期', auto_now_add=True)
+    delete_status = models.BooleanField('删除状态', default=False)
+
+    def __str__(self):
+        return str(self.customer) + str(self.consultant)
+
+    class Meta:
+        verbose_name = '跟进记录表'
+        verbose_name_plural = '跟进记录表'
+
+
+class Department(models.Model):
+    """
+    部门表
+    """
+    name = models.CharField(max_length=12, verbose_name='部门名称')
+    count = models.IntegerField(verbose_name='部门人数')  # 这个部门人数是假的 还没有根据用户统计
+
+    def __str__(self):
+        return self.name
+    
+    class Meta:
+        verbose_name = '部门表'
+        verbose_name_plural = '部门表'
+
+
 class UserInfo(models.Model):
     """
     用户表：销售...
@@ -75,6 +129,7 @@ class UserInfo(models.Model):
     email = models.EmailField()
     telephone = models.CharField(max_length=16)
     is_active = models.BooleanField(default=True)
+    depart = models.ForeignKey('Department', default=1)
 
     def __str__(self):
         return self.username

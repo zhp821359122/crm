@@ -22,7 +22,7 @@ def add_edit_customer(request, cid=None):  # 编辑客户时需要带id值 当�
         if form_obj.is_valid():
             form_obj.save()
             return redirect('customers')
-    user_name = UserInfo.objects.get(id=request.session.get('user_id')).username
+    user_name = request.user.username
     context = {
         'form_obj': form_obj,
         'content_title': content_title,  # base.html中必传的参数
@@ -37,7 +37,7 @@ def customers(request):
         # 如果是POST请求则是进行公私户转换
         option = request.POST.get('options')
         cids = request.POST.getlist('cids')  # 注意这里要用getlist！！！
-        u_obj = UserInfo.objects.get(id=request.session.get('user_id'))
+        u_obj = request.user
         if option and cids:
             c_obj = Customer.objects.filter(id__in=cids)
             if option == 'reverse_gs':
@@ -49,7 +49,7 @@ def customers(request):
         return redirect(request.get_full_path())  # 转换后直接返回至原来页面 第几页和查询条件都不变 牛逼啊
     else:
         # 用户名字 用来渲染到页面
-        user_name = UserInfo.objects.get(id=request.session.get('user_id')).username
+        user_name = request.user.username
         # 如果是GET请求则展示客户 也可以封装成一个类。
         if request.path == reverse('customers'):
             # 如果是customer这个url过来的请求 就只能查看公户信息
@@ -58,7 +58,7 @@ def customers(request):
         else:
             content_title = '我的客户'
             # 如果是my_customer这个url过来的请求 就只能查看私户信息
-            user_obj = UserInfo.objects.get(id=request.session.get('user_id'))
+            user_obj = request.user
             customers_obj = Customer.objects.filter(consultant=user_obj)
         search_field = request.GET.get('search_field')
         kw = request.GET.get('kw')  # 搜索条件

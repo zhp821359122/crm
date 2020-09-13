@@ -15,9 +15,11 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from sales.views import login, register, customers, add_edit_customer
+from sales.views import login, register, customers, add_edit_customer, consult_record
 
 urlpatterns = [
+    # 跟进记录
+    url(r'^consult_record/', consult_record, name='consult_record'),
     # 我的客户 走的也是customer视图逻辑一样 就是url不同
     url(r'^my_customers/', customers, name='my_customers'),
     # 编辑客户 两个url同时匹配同一个视图函数进行处理

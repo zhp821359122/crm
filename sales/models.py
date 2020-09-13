@@ -93,12 +93,15 @@ class ConsultRecord(models.Model):
     customer = models.ForeignKey('Customer', verbose_name='所咨询客户')
     note = models.TextField(verbose_name='跟进内容')
     status = models.CharField('跟进状态', max_length=8, choices=seek_status_choices, help_text='选择客户此时的状态')
-    consultant = models.ForeignKey('UserInfo', verbose_name='跟进人', related_name='records')  # related_name 是什么
+    consultant = models.ForeignKey('UserInfo', verbose_name='跟进人', related_name='records')
+    # 展示跟进记录的时候应该是按客户来划分的呀...就是说当前的客户是我的 然后我点击跟进记录 应该是能看到属于我的用户的所有跟进记录 就算是之前别的用户（如果他辞职了）跟进过的应该也能看见才对...
+    # 所以展示跟进记录时本应该先根据当前用户的id查找出所有私户的id 然后根据私户的id查找出所有该客户的跟进记录
+    # 但是我们规定好了当前用户只能查看自己的跟进记录 如果是其他用户对该客户的跟进记录 需要让他手动调给你看
     date = models.DateTimeField('跟进日期', auto_now_add=True)
     delete_status = models.BooleanField('删除状态', default=False)
 
     def __str__(self):
-        return str(self.customer) + str(self.consultant)
+        return str(self.customer) + '  销售' + str(self.consultant)
 
     class Meta:
         verbose_name = '跟进记录表'
@@ -114,7 +117,7 @@ class Department(models.Model):
 
     def __str__(self):
         return self.name
-    
+
     class Meta:
         verbose_name = '部门表'
         verbose_name_plural = '部门表'

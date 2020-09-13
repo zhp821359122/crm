@@ -197,6 +197,12 @@
                 <p>我的客户<i class="right fa fa-angle-right"></i></p></a>
             </li>
 
+             <li class="nav-item ">
+            <a href="{% url 'consult_record' %}" class="nav-link"><i class="fa fa-address-book-o"></i>
+                &nbsp;
+                <p>跟进记录<i class="right fa fa-angle-right"></i></p></a>
+            </li>
+
           <li class="nav-item menu-open ">
             <a href="#" class="nav-link ">
               <i class="fa fa-reorder"></i>
@@ -309,6 +315,9 @@
     }else if(url=='customers'){
         jQuery($('nav.mt-2 ul li.nav-item a')[0]).parent().siblings().children('a').removeClass('active');
         jQuery($('nav.mt-2 ul li.nav-item a')[0]).addClass('active');
+    }else if(url=='consult_record'){
+        jQuery($('nav.mt-2 ul li.nav-item a')[2]).parent().siblings().children('a').removeClass('active');
+        jQuery($('nav.mt-2 ul li.nav-item a')[2]).addClass('active');
     }
 </script>
 {% block script %}

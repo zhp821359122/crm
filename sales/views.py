@@ -2,10 +2,21 @@ from django.shortcuts import render, redirect, HttpResponse, reverse
 from django.conf import settings
 
 from sales.forms import RegisterForm, CustomerForm
-from sales.models import UserInfo, Customer
+from sales.models import UserInfo, Customer, ConsultRecord
 from sales.utils.hashlib_func import set_md5
 from sales.utils.page import MyPagination
 # Create your views here.
+
+
+# 跟进记录
+def consult_record(request):
+    # 查询跟进人为当前用户 且状态为未删除的所有跟进记录
+    consult_record_objs = ConsultRecord.objects.filter(consultant=request.user_obj, delete_status=False).order_by('-id')
+    context = {
+        'consult_record_objs': consult_record_objs,
+        'content_title': '跟进记录',
+    }
+    return render(request, 'consult_record.html', context=context)
 
 
 # 添加和编辑客户 合在一起的视图 其实就是编辑客户的一模一样的代码 添加客户也使用 所以就合起来了
@@ -108,6 +119,7 @@ def customers(request):
         return render(request, 'customers.html', context=context)
 
 
+# 登录
 def login(request):
     if request.method == 'GET':
         return render(request, 'login.html')
@@ -126,6 +138,7 @@ def login(request):
             return render(request, 'login.html', context)
 
 
+# 注册
 def register(request):
     if request.method == "GET":
         context = {

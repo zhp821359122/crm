@@ -51,6 +51,7 @@
         <th>性别</th>
         <th>报名状态</th>
         <th>销售</th>
+        <th>跟进记录</th>
         <th>操作</th>
     </tr>
     {% for customer_obj in customers_obj %}
@@ -61,6 +62,7 @@
             <td>{{ customer_obj.get_sex_display }}</td>
             <td>{{ customer_obj.get_status_show }}</td>
             <td>{{ customer_obj.consultant }}</td>
+            <td><a href="{% url 'consult_record' %}?cid={{ customer_obj.pk }}">查看详情</a></td>
             <td><li class="fa fa-edit"><a href="{% url 'edit_customer' customer_obj.pk %}?next={{ request.get_full_path }}">编辑</a></li></td>
         </tr>
     {% endfor %}

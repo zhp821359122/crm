@@ -10,12 +10,39 @@ from sales.utils.page import MyPagination
 
 # 跟进记录
 def consult_record(request):
-    # 查询跟进人为当前用户 且状态为未删除的所有跟进记录
+    # 只能查看跟进人为当前用户 且状态为未删除的所有跟进记录
     consult_record_objs = ConsultRecord.objects.filter(consultant=request.user_obj, delete_status=False).order_by('-id')
+    if request.method == 'GET':
+        cid = request.GET.get('cid')
+        search_field = request.GET.get('search_field')
+        kw = request.GET.get('kw')
+        if cid:
+            # 查看详情 即该客户的跟进内容
+            consult_record_objs = consult_record_objs.filter(customer__id=cid)
+        if search_field and kw:
+            # 这个是后面添加到context里的 有才添加
+            search_dict = {
+                'search_field': search_field,
+                'kw': kw,
+            }
+            # 搜索条件 妙啊
+            search_field = 'customer__' + search_field + '__contains'
+            consult_record_objs = consult_record_objs.filter(**{search_field: kw.strip()})
+
+    elif request.method == 'POST':
+        rids = request.POST.getlist('rids')  # 注意这里是getlist
+        option = request.POST.get('options')
+        if option == 'delete_record' and rids:
+            consult_record_objs.filter(id__in=rids).update(delete_status=True)
+            # 返回当前url（携带GET查询条件 相当于只是把POST变成了GET）
+        return redirect(request.get_full_path())
     context = {
         'consult_record_objs': consult_record_objs,
         'content_title': '跟进记录',
     }
+    # 保留搜索条件
+    if request.GET.get('search_field') and request.GET.get('kw'):
+        context.update(search_dict)
     return render(request, 'consult_record.html', context=context)
 
 

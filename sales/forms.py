@@ -8,6 +8,8 @@ from multiselectfield.forms.fields import MultiSelectFormField
 
 # 客户跟进信息的ModelForm
 class ConsultRecordForm(forms.ModelForm):
+    # 跟进人应该默认为当前登录用户才对...加一个验证函数 判断一下是否为当前用户？？？
+    # 还有跟进客户必须是自己的私户才对...如何设置？？？
     class Meta:
         model = ConsultRecord
         fields = '__all__'
@@ -20,7 +22,6 @@ class ConsultRecordForm(forms.ModelForm):
         }
 
     def __init__(self,  *args, **kwargs):
-        # 跟进人应该默认为当前登录用户才对...加一个验证函数 判断一下是否为当前用户？？？
         super(ConsultRecordForm, self).__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
             if not isinstance(field, MultiSelectFormField):

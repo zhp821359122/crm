@@ -36,7 +36,7 @@ def add_edit_consult_record(request, rid=None):
 
 # 跟进记录
 def consult_record(request):
-    # 只能查看跟进人为当前用户 且状态为未删除的所有跟进记录
+    # 只能查看跟进人为当前用户 且状态为未删除的所有跟进记录  ？？？有bug：应该是只能看销售为当前用户的人才对
     consult_record_objs = ConsultRecord.objects.filter(consultant=request.user_obj, delete_status=False).order_by('-id')
     if request.method == 'GET':
         cid = request.GET.get('cid')
@@ -55,6 +55,29 @@ def consult_record(request):
             search_field = 'customer__' + search_field + '__contains'
             consult_record_objs = consult_record_objs.filter(**{search_field: kw.strip()})
 
+        per_page_count = settings.PER_PAGE_COUNT  # per_page_count每页加载的客户数量
+        page_range_count = settings.PAGE_RANGE_COUNT  # page_range_count分页组件加载的页码数
+        page_num = request.GET.get('page')  # page_num当前请求的页码数
+        total_count = consult_record_objs.count()  # total_count 搜索条件下客户的总个数
+        shang, yu = divmod(total_count, per_page_count)
+        if yu:
+            total_page = shang + 1  # total_page总页码数
+        else:
+            total_page = shang
+        try:
+            page_num = int(page_num)  # 先转成int型 如果输入的不是数字就把它转成1
+        except Exception:
+            page_num = 1
+        if page_num <= 0:  # 如果输入的页码过小重置
+            page_num = 1
+        elif page_num > total_page:  # 如果输入的页码过大重置
+            page_num = total_page
+
+        html = MyPagination(request, page_num, total_page, page_range_count).get_html()  # 分页组件
+        # 倒序排列 [0:10]
+        if consult_record_objs:  # 如果没有搜索条件匹配的结果就不用取索引了 否则会报错
+            consult_record_objs = consult_record_objs.order_by('-id')[(page_num - 1) * per_page_count:page_num * per_page_count]
+
     elif request.method == 'POST':
         rids = request.POST.getlist('rids')  # 注意这里是getlist
         option = request.POST.get('options')
@@ -62,9 +85,11 @@ def consult_record(request):
             consult_record_objs.filter(id__in=rids).update(delete_status=True)
             # 返回当前url（携带GET查询条件 相当于只是把POST变成了GET）
         return redirect(request.get_full_path())
+
     context = {
         'consult_record_objs': consult_record_objs,
         'content_title': '跟进记录',
+        'pagination': html,
     }
     # 保留搜索条件
     if request.GET.get('search_field') and request.GET.get('kw'):
@@ -156,7 +181,7 @@ def customers(request):
         elif page_num > total_page:  # 如果输入的页码过大重置
             page_num = total_page
 
-        html = MyPagination(request, page_num, total_page, page_range_count, request.path).get_html()  # 分页组件
+        html = MyPagination(request, page_num, total_page, page_range_count).get_html()  # 分页组件
         # 倒序排列 [0:10]
         if customers_obj:  # 如果没有搜索条件匹配的结果就不用取索引了 否则会报错
             customers_obj = customers_obj.order_by('-id')[(page_num - 1) * per_page_count:page_num * per_page_count]

@@ -7,12 +7,11 @@ class MyPagination(object):
      page_num：当前请求的分页数
      total_page：总页码
      page_range_count：分页组件中加载的页码数量 7
-     base_url: 组件中a标签的根地址 /customer/ 可以request.path取出来
      request: 当前url的request对象 用来提取GET请求后面携带的除了page以外的其他参数  格式为&search_field=qq&kw=111或者为空 提取逻辑直接封装到分页组件中来
 
      get_html返回安全的可以直接在页面中渲染的分页组件
     """
-    def __init__(self, request, page_num, total_page, page_range_count, base_url):
+    def __init__(self, request, page_num, total_page, page_range_count):
         if page_num <= int(page_range_count / 2):
             page_range = range(1, page_range_count + 1)  # page_range 循环生成分页组件a标签时用到的每一页的页码
         elif page_num >= (total_page - int(page_range_count / 2)):
@@ -32,7 +31,7 @@ class MyPagination(object):
         self.page_num = page_num
         self.page_range = page_range
         self.total_page = total_page
-        self.base_url = base_url
+        self.base_url = request.path  # base_url: 组件中a标签的根地址 /customer/ 可以request.path取出来
         self.param = param
 
     def get_html(self):

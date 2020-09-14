@@ -15,10 +15,14 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from sales.views import login, register, customers, add_edit_customer, consult_record
+from sales.views import login, register, customers, add_edit_customer, consult_record, add_edit_consult_record
 
 urlpatterns = [
-    # 跟进记录
+    # 编辑跟进记录 和客户一样是同一个视图进行处理
+    url(r'^edit_consult_record/(\d+)', add_edit_consult_record, name='edit_consult_record'),
+    # 添加跟进记录
+    url(r'^add_consult_record', add_edit_consult_record, name='add_consult_record'),
+    # 跟进记录展示
     url(r'^consult_record/', consult_record, name='consult_record'),
     # 我的客户 走的也是customer视图逻辑一样 就是url不同
     url(r'^my_customers/', customers, name='my_customers'),

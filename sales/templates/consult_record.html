@@ -34,7 +34,7 @@
                 <option value="delete_record" >删除跟进记录</option>
 </select>&nbsp;
     <button class="btn btn-danger">GO</button>&nbsp;
-     <a href="{% url 'add_customer' %}"><button type="button" class=" btn btn-primary">添加跟进记录</button></a>
+     <a href="{% url 'add_consult_record' %}"><button type="button" class=" btn btn-primary">添加跟进记录</button></a>
         </div>
 
 
@@ -59,7 +59,7 @@
             <td>{{ consult_record_obj.get_status_display }}</td>
             <td>{{ consult_record_obj.consultant }}</td>
             <td>{{ consult_record_obj.date|date:'Y-m-d'}}</td>
-            <td><li class="fa fa-edit"><a href="{% url 'edit_customer' consult_record_obj.pk %}?next={{ request.get_full_path }}">编辑</a></li></td>
+            <td><li class="fa fa-edit"><a href="{% url 'edit_consult_record' consult_record_obj.pk %}?next={{ request.get_full_path }}">编辑</a></li></td>
         </tr>
     {% endfor %}
 

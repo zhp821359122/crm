@@ -1,11 +1,37 @@
 from django.shortcuts import render, redirect, HttpResponse, reverse
 from django.conf import settings
 
-from sales.forms import RegisterForm, CustomerForm
+from sales.forms import RegisterForm, CustomerForm, ConsultRecordForm
 from sales.models import UserInfo, Customer, ConsultRecord
 from sales.utils.hashlib_func import set_md5
 from sales.utils.page import MyPagination
 # Create your views here.
+
+
+# 添加和编辑跟进记录  和添加编辑客户逻辑和页面一模一样 就是要写一个ModelForm
+def add_edit_consult_record(request, rid=None):
+    if rid:
+        content_title = '编辑跟进信息'
+    else:
+        content_title = '添加跟进信息'
+    consult_obj = ConsultRecord.objects.filter(id=rid).first()
+    if request.method == 'GET':
+        form_obj = ConsultRecordForm(instance=consult_obj)  # 如果是添加客户 则实例化一个空对象
+    elif request.method == 'POST':
+        form_obj = ConsultRecordForm(request.POST, instance=consult_obj)  # 如果是添加客户则instance是None
+        if form_obj.is_valid():
+            form_obj.save()
+            if rid:
+                # 如果是编辑客户（cid存在） 则跳转至点击编辑之前的完整url 注意此时的url是form表单默认为空时携带了参数的原url 所以可以直接取值 牛逼！
+                return redirect(request.get_full_path().split('next=')[-1])
+            else:
+                # 如果是添加客户（cid不存在） 则跳转至展示客户页面
+                return redirect('consult_record')
+    context = {
+        'form_obj': form_obj,
+        'content_title': content_title,  # base.html中必传的参数
+    }
+    return render(request, 'add_customer.html', context)
 
 
 # 跟进记录

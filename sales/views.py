@@ -16,9 +16,9 @@ def add_edit_consult_record(request, rid=None):
         content_title = '添加跟进信息'
     consult_obj = ConsultRecord.objects.filter(id=rid).first()
     if request.method == 'GET':
-        form_obj = ConsultRecordForm(instance=consult_obj)  # 如果是添加客户 则实例化一个空对象
+        form_obj = ConsultRecordForm(request, instance=consult_obj)  # 如果是添加客户 则实例化一个空对象
     elif request.method == 'POST':
-        form_obj = ConsultRecordForm(request.POST, instance=consult_obj)  # 如果是添加客户则instance是None
+        form_obj = ConsultRecordForm(request, request.POST, instance=consult_obj)  # 如果是添加客户则instance是None
         if form_obj.is_valid():
             form_obj.save()
             if rid:
@@ -36,8 +36,8 @@ def add_edit_consult_record(request, rid=None):
 
 # 跟进记录
 def consult_record(request):
-    # 只能查看跟进人为当前用户 且状态为未删除的所有跟进记录  ？？？有bug：应该是只能看销售为当前用户的人才对
-    consult_record_objs = ConsultRecord.objects.filter(consultant=request.user_obj, delete_status=False).order_by('-id')
+    # 只能查看当前用户的私户的所有状态为未删除的跟进记录
+    consult_record_objs = ConsultRecord.objects.filter(customer__consultant=request.user_obj, delete_status=False).order_by('-id')
     if request.method == 'GET':
         cid = request.GET.get('cid')
         search_field = request.GET.get('search_field')

@@ -2,14 +2,12 @@ import re
 from django import forms
 from django.core.exceptions import ValidationError
 
-from sales.models import Customer, ConsultRecord
+from sales.models import Customer, ConsultRecord, UserInfo
 from multiselectfield.forms.fields import MultiSelectFormField
 
 
 # 客户跟进信息的ModelForm
 class ConsultRecordForm(forms.ModelForm):
-    # 跟进人应该默认为当前登录用户才对...加一个验证函数 判断一下是否为当前用户？？？
-    # 还有跟进客户必须是自己的私户才对...如何设置？？？
     class Meta:
         model = ConsultRecord
         fields = '__all__'
@@ -21,11 +19,18 @@ class ConsultRecordForm(forms.ModelForm):
             'consultant': {'required': '跟进人不能为空！！！'},
         }
 
-    def __init__(self,  *args, **kwargs):
+    def __init__(self, request, *args, **kwargs):
         super(ConsultRecordForm, self).__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
             if not isinstance(field, MultiSelectFormField):
                 field.widget.attrs.update({'class': 'form-control'})
+            # 跟进人应该默认为当前登录用户...只能把request传进来才能取出当前登录用户 field.queryset
+            if field_name == 'customer':
+                field.queryset = Customer.objects.filter(consultant=request.user_obj)
+            # 还有跟进客户必须是自己的私户才对... 并且去掉第一项----------------------------------
+            if field_name == 'consultant':
+                # field.queryset = UserInfo.objects.filter(id=request.user_obj.id)
+                field.choices = ((request.user_obj.pk, request.user_obj),)
 
 
 # 添加客户页面的ModelForm ModelForm要指定model 直接自动帮你生成 你只需要修改

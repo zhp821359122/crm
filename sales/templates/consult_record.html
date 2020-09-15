@@ -58,7 +58,7 @@
             <td>{{ consult_record_obj.note }}</td>
             <td>{{ consult_record_obj.get_status_display }}</td>
             <td>{{ consult_record_obj.consultant }}</td>
-            <td>{{ consult_record_obj.date|date:'Y-m-d'}}</td>
+            <td>{{ consult_record_obj.date|date:'Y-m-d H:i:s'}}</td>
             <td><li class="fa fa-edit"><a href="{% url 'edit_consult_record' consult_record_obj.pk %}?next={{ request.get_full_path }}">编辑</a></li></td>
         </tr>
     {% endfor %}

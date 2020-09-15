@@ -37,7 +37,7 @@ def add_edit_consult_record(request, rid=None):
 # 跟进记录
 def consult_record(request):
     # 只能查看当前用户的私户的所有状态为未删除的跟进记录
-    consult_record_objs = ConsultRecord.objects.filter(customer__consultant=request.user_obj, delete_status=False).order_by('-id')
+    consult_record_objs = ConsultRecord.objects.filter(customer__consultant=request.user_obj, delete_status=False)
     if request.method == 'GET':
         cid = request.GET.get('cid')
         search_field = request.GET.get('search_field')
@@ -74,9 +74,9 @@ def consult_record(request):
             page_num = total_page
 
         html = MyPagination(request, page_num, total_page, page_range_count).get_html()  # 分页组件
-        # 倒序排列 [0:10]
+        # 把最后的结果根据时间倒序排列 [0:10]每次取出10个 这里如果数值超出了索引不会报错...
         if consult_record_objs:  # 如果没有搜索条件匹配的结果就不用取索引了 否则会报错
-            consult_record_objs = consult_record_objs.order_by('-id')[(page_num - 1) * per_page_count:page_num * per_page_count]
+            consult_record_objs = consult_record_objs.order_by('-date')[(page_num - 1) * per_page_count:page_num * per_page_count]
 
     elif request.method == 'POST':
         rids = request.POST.getlist('rids')  # 注意这里是getlist

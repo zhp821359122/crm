@@ -15,13 +15,19 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from sales.views import login, register, customers, add_edit_customer, consult_record, add_edit_consult_record
+from sales.views import login, register, customers, add_edit_customer, consult_record, add_edit_consult_record, enrollments, add_edit_enrollment
 
 urlpatterns = [
+    # 编辑报名记录
+    url(r'^edit_enrollment/(\d+)', add_edit_enrollment, name='edit_enrollment'),
+    # 添加报名记录
+    url(r'^add_enrollment/', add_edit_enrollment, name='add_enrollment'),
+    # 查看报名记录 一样的
+    url(r'^enrollments/', enrollments, name='enrollments'),
     # 编辑跟进记录 和客户一样是同一个视图进行处理
     url(r'^edit_consult_record/(\d+)', add_edit_consult_record, name='edit_consult_record'),
     # 添加跟进记录
-    url(r'^add_consult_record', add_edit_consult_record, name='add_consult_record'),
+    url(r'^add_consult_record/', add_edit_consult_record, name='add_consult_record'),
     # 跟进记录展示
     url(r'^consult_record/', consult_record, name='consult_record'),
     # 我的客户 走的也是customer视图逻辑一样 就是url不同

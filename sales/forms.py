@@ -1,9 +1,28 @@
 import re
 from django import forms
 from django.core.exceptions import ValidationError
+from django.forms import BooleanField
 
-from sales.models import Customer, ConsultRecord, UserInfo
+from sales.models import Customer, ConsultRecord, Enrollment, ClassList
 from multiselectfield.forms.fields import MultiSelectFormField
+
+
+# 报名信息表的ModelForm
+class EnrollmentForm(forms.ModelForm):
+    # 如何根据用户选择的校区动态生成该校区的课程信息？？？
+    class Meta:
+        model = Enrollment
+        fields = '__all__'
+        exclude = ('delete_status',)
+
+    def __init__(self, request, *args, **kwargs):
+        super(EnrollmentForm, self).__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            # 注意和MultiSelectFormField不同的是BooleanField是在django原生的Model里引入的
+            if not isinstance(field, BooleanField):
+                field.widget.attrs.update({'class': 'form-control'})
+            if field_name == 'customer':
+                field.queryset = Customer.objects.filter(consultant=request.user_obj)
 
 
 # 客户跟进信息的ModelForm

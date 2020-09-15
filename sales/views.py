@@ -1,11 +1,100 @@
 from django.shortcuts import render, redirect, HttpResponse, reverse
 from django.conf import settings
 
-from sales.forms import RegisterForm, CustomerForm, ConsultRecordForm
-from sales.models import UserInfo, Customer, ConsultRecord
+from sales.forms import RegisterForm, CustomerForm, ConsultRecordForm, EnrollmentForm
+from sales.models import UserInfo, Customer, ConsultRecord, Enrollment
 from sales.utils.hashlib_func import set_md5
 from sales.utils.page import MyPagination
 # Create your views here.
+
+
+# 添加和编辑报名记录
+def add_edit_enrollment(request, eid=None):
+    # bug : 如果将某条记录删除了 再次添加联合字段相同的记录时 会添加不了
+    if eid:
+        content_title = '编辑报名信息'
+    else:
+        content_title = '添加报名信息'
+    enrollment_obj = Enrollment.objects.filter(id=eid).first()
+    if request.method == 'GET':
+        form_obj = EnrollmentForm(request, instance=enrollment_obj)  # 如果是添加客户 则实例化一个空对象
+    elif request.method == 'POST':
+        form_obj = EnrollmentForm(request, request.POST, instance=enrollment_obj)  # 如果是添加客户则instance是None
+        if form_obj.is_valid():
+            form_obj.save()
+            if eid:
+                # 如果是编辑客户（cid存在） 则跳转至点击编辑之前的完整url 注意此时的url是form表单默认为空时携带了参数的原url 所以可以直接取值 牛逼！
+                return redirect(request.get_full_path().split('next=')[-1])
+            else:
+                # 如果是添加客户（cid不存在） 则跳转至展示客户页面
+                return redirect('enrollments')
+    context = {
+        'form_obj': form_obj,
+        'content_title': content_title,  # base.html中必传的参数
+    }
+    return render(request, 'add_enrollment.html', context)
+
+
+# 查看报名记录 复制粘贴照葫芦画瓢
+def enrollments(request):
+    # 只能查看当前用户的私户的所有状态为未删除的报名信息
+    enrollment_objs = Enrollment.objects.filter(customer__consultant=request.user_obj, delete_status=False)
+    if request.method == 'GET':
+        search_field = request.GET.get('search_field')
+        kw = request.GET.get('kw')
+        if search_field and kw:
+            # 这个是后面添加到context里的 有才添加
+            search_dict = {
+                'search_field': search_field,
+                'kw': kw,
+            }
+            # 搜索条件
+            if search_field == 'course':
+                search_field = 'enrolment_class__course__contains'
+            elif search_field == 'name':
+                search_field = 'customer__name__contains'
+                enrollment_objs = enrollment_objs.filter(**{search_field: kw.strip()})
+
+        per_page_count = settings.PER_PAGE_COUNT  # per_page_count每页加载的客户数量
+        page_range_count = settings.PAGE_RANGE_COUNT  # page_range_count分页组件加载的页码数
+        page_num = request.GET.get('page')  # page_num当前请求的页码数
+        total_count = enrollment_objs.count()  # total_count 搜索条件下客户的总个数
+        shang, yu = divmod(total_count, per_page_count)
+        if yu:
+            total_page = shang + 1  # total_page总页码数
+        else:
+            total_page = shang
+        try:
+            page_num = int(page_num)  # 先转成int型 如果输入的不是数字就把它转成1
+        except Exception:
+            page_num = 1
+        if page_num <= 0:  # 如果输入的页码过小重置
+            page_num = 1
+        elif page_num > total_page:  # 如果输入的页码过大重置
+            page_num = total_page
+
+        html = MyPagination(request, page_num, total_page, page_range_count).get_html()  # 分页组件
+        # 把最后的结果根据时间倒序排列 [0:10]每次取出10个 这里如果数值超出了索引不会报错...
+        if enrollment_objs:  # 如果没有搜索条件匹配的结果就不用取索引了 否则会报错
+            enrollment_objs = enrollment_objs.order_by('-enrolled_date')[(page_num - 1) * per_page_count:page_num * per_page_count]
+
+    elif request.method == 'POST':
+        eids = request.POST.getlist('eids')  # 注意这里是getlist
+        option = request.POST.get('options')
+        if option == 'delete_enrollment' and eids:
+            enrollment_objs.filter(id__in=eids).update(delete_status=True)
+            # 返回当前url（携带GET查询条件 相当于只是把POST变成了GET）
+        return redirect(request.get_full_path())
+
+    context = {
+        'enrollment_objs': enrollment_objs,
+        'content_title': '跟进记录',
+        'pagination': html,
+    }
+    # 保留搜索条件
+    if request.GET.get('search_field') and request.GET.get('kw'):
+        context.update(search_dict)
+    return render(request, 'enrollments.html', context=context)
 
 
 # 添加和编辑跟进记录  和添加编辑客户逻辑和页面一模一样 就是要写一个ModelForm
@@ -34,7 +123,7 @@ def add_edit_consult_record(request, rid=None):
     return render(request, 'add_customer.html', context)
 
 
-# 跟进记录
+# 跟进记录  直接展示跟进内容 如果很长的话页面样式会很乱。
 def consult_record(request):
     # 只能查看当前用户的私户的所有状态为未删除的跟进记录
     consult_record_objs = ConsultRecord.objects.filter(customer__consultant=request.user_obj, delete_status=False)

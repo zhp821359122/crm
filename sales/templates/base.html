@@ -202,6 +202,12 @@
                 &nbsp;
                 <p>跟进记录<i class="right fa fa-angle-right"></i></p></a>
             </li>
+              <li class="nav-item ">
+            <a href="{% url 'enrollments' %}" class="nav-link"><i class="fa fa-check"></i>
+                &nbsp;
+                <p>报名记录<i class="right fa fa-angle-right"></i></p></a>
+            </li>
+
 
           <li class="nav-item menu-open ">
             <a href="#" class="nav-link ">
@@ -308,6 +314,11 @@
         $(this).addClass('active');
     })
     {#根据当前的url来让侧边栏的选项高亮（由于是不同的页面 上面的js代码无效 除非你不刷新页面）#}
+
+    {#这里定义的列表是为了保证在跳转到该栏目的子页面时该栏目仍然高亮#}
+    consult_record_urls = ['consult_record', 'add_consult_record', 'edit_consult_record']
+    enrollment_record_urls = ['enrollments', 'add_enrollment', 'edit_enrollment']
+    {#这里是按/分割 所以注意在配置路由的时候后面有无/还是有区别的#}
     url = location.href.split('/')[3];
     if(url=='my_customers'){
         jQuery($('nav.mt-2 ul li.nav-item a')[1]).parent().siblings().children('a').removeClass('active');
@@ -315,9 +326,12 @@
     }else if(url=='customers'){
         jQuery($('nav.mt-2 ul li.nav-item a')[0]).parent().siblings().children('a').removeClass('active');
         jQuery($('nav.mt-2 ul li.nav-item a')[0]).addClass('active');
-    }else if(url=='consult_record'){
+    }else if(consult_record_urls.includes(url)){
         jQuery($('nav.mt-2 ul li.nav-item a')[2]).parent().siblings().children('a').removeClass('active');
         jQuery($('nav.mt-2 ul li.nav-item a')[2]).addClass('active');
+    }else if(enrollment_record_urls.includes(url)){
+        jQuery($('nav.mt-2 ul li.nav-item a')[3]).parent().siblings().children('a').removeClass('active');
+        jQuery($('nav.mt-2 ul li.nav-item a')[3]).addClass('active');
     }
 </script>
 {% block script %}

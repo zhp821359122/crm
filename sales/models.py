@@ -85,6 +85,9 @@ class Enrollment(models.Model):
         verbose_name = '报名表'
         verbose_name_plural = '报名表'
 
+    def __str__(self):
+        return self.customer.name + ':' + self.enrolment_class.get_course_display()
+
 
 class ConsultRecord(models.Model):
     """

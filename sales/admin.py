@@ -8,6 +8,8 @@ class CustomerAdmin(admin.ModelAdmin):
     list_display = ('qq', 'name', 'status', 'consultant')
 
 
+admin.site.register(models.StudyRecord)
+admin.site.register(models.CourseRecord)
 admin.site.register(models.Campuses)
 admin.site.register(models.ClassList)
 admin.site.register(models.UserInfo)

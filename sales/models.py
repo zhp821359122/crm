@@ -83,6 +83,11 @@ class CourseRecord(models.Model):
 
     class Meta:
         unique_together = ('re_class', 'day_num')
+        verbose_name = '课程记录表'
+        verbose_name_plural = '课程记录表'
+
+    def __str__(self):
+        return self.re_class.course + str(self.re_class.semester) + ':' + str(self.day_num)
 
 
 class StudyRecord(models.Model):
@@ -95,11 +100,16 @@ class StudyRecord(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     note = models.CharField('备注', max_length=255, blank=True, null=True)
     homework = models.FileField(verbose_name='作业文件', blank=True, null=True)
-    course_record = models.ForeignKey('ConsultRecord', verbose_name='某节课程')
+    course_record = models.ForeignKey('CourseRecord', verbose_name='某节课程')
     student = models.ForeignKey('Customer', verbose_name='学员')
 
     class Meta:
         unique_together = ('course_record', 'student')
+        verbose_name = '学习记录表'
+        verbose_name_plural = '学习记录表'
+
+    def __str__(self):
+        return self.student.name + ':' + self.course_record.re_class.campuses.name + self.course_record.re_class.course + ':' + str(self.course_record.re_class.semester) + ':' + str(self.course_record.day_num)
 
 
 class Enrollment(models.Model):

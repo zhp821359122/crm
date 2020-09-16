@@ -7,6 +7,26 @@ from sales import models
 from multiselectfield.forms.fields import MultiSelectFormField
 
 
+# 课程信息表的ModelForm
+class CourseRecordForm(forms.ModelForm):
+    class Meta:
+        model = models.CourseRecord
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super(CourseRecordForm, self).__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            if not isinstance(field, MultiSelectFormField) and not isinstance(field, BooleanField):
+                field.widget.attrs.update({'class': 'form-control'})
+            # # 跟进人应该默认为当前登录用户...只能把request传进来才能取出当前登录用户 field.queryset
+            # if field_name == 'customer':
+            #     field.queryset = models.Customer.objects.filter(consultant=request.user_obj)
+            # # 还有跟进客户必须是自己的私户才对... 并且去掉第一项----------------------------------
+            # if field_name == 'consultant':
+            #     # field.queryset = UserInfo.objects.filter(id=request.user_obj.id)
+            #     field.choices = ((request.user_obj.pk, request.user_obj),)
+
+
 # 报名信息表的ModelForm
 class EnrollmentForm(forms.ModelForm):
     # 如何根据用户选择的校区动态生成该校区的课程信息？？？

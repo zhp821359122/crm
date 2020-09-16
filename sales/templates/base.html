@@ -209,7 +209,7 @@
             </li>
             </li>
               <li class="nav-item ">
-            <a href="#" class="nav-link"><i class="fa fa-child"></i>
+            <a href="{% url 'course_records' %}" class="nav-link"><i class="fa fa-child"></i>
                 &nbsp;
                 <p>课程记录<i class="right fa fa-angle-right"></i></p></a>
             </li>
@@ -324,6 +324,7 @@
     {#这里定义的列表是为了保证在跳转到该栏目的子页面时该栏目仍然高亮#}
     consult_record_urls = ['consult_record', 'add_consult_record', 'edit_consult_record']
     enrollment_record_urls = ['enrollments', 'add_enrollment', 'edit_enrollment']
+    course_record_urls = ['course_records', 'add_course_record', 'edit_course_record']
     {#这里是按/分割 所以注意在配置路由的时候后面有无/还是有区别的#}
     url = location.href.split('/')[3];
     if(url=='my_customers'){
@@ -338,6 +339,9 @@
     }else if(enrollment_record_urls.includes(url)){
         jQuery($('nav.mt-2 ul li.nav-item a')[3]).parent().siblings().children('a').removeClass('active');
         jQuery($('nav.mt-2 ul li.nav-item a')[3]).addClass('active');
+    }else if(course_record_urls.includes(url)){
+        jQuery($('nav.mt-2 ul li.nav-item a')[4]).parent().siblings().children('a').removeClass('active');
+        jQuery($('nav.mt-2 ul li.nav-item a')[4]).addClass('active');
     }
 </script>
 {% block script %}

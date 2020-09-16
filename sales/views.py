@@ -8,6 +8,108 @@ from sales.utils.page import MyPagination
 # Create your views here.
 
 
+# 添加和编辑课程记录
+def add_edit_course_record(request, cid=None):
+    # bug : 如果将某条记录删除了 再次添加联合字段相同的记录时 会添加不了
+    if cid:
+        content_title = '编辑课程信息'
+    else:
+        content_title = '添加课程信息'
+    course_record_obj = models.CourseRecord.objects.filter(id=cid).first()
+    if request.method == 'GET':
+        form_obj = forms.CourseRecordForm(instance=course_record_obj)  # 如果是添加客户 则实例化一个空对象
+    elif request.method == 'POST':
+        form_obj = forms.CourseRecordForm(request.POST, instance=course_record_obj)  # 如果是添加客户则instance是None
+        if form_obj.is_valid():
+            form_obj.save()
+            if cid:
+                # 如果是编辑客户（cid存在） 则跳转至点击编辑之前的完整url 注意此时的url是form表单默认为空时携带了参数的原url 所以可以直接取值 牛逼！
+                return redirect(request.get_full_path().split('next=')[-1])
+            else:
+                # 如果是添加客户（cid不存在） 则跳转至展示客户页面
+                return redirect('course_records')
+    context = {
+        'form_obj': form_obj,
+        'content_title': content_title,  # base.html中必传的参数
+    }
+    return render(request, 'add_consult_record.html', context)
+
+
+# 课程记录
+def course_records(request):
+    course_record_objs = models.CourseRecord.objects.all()
+    if request.method == 'GET':
+        search_field = request.GET.get('search_field')
+        kw = request.GET.get('kw')
+        if search_field and kw:
+            # 这个是后面添加到context里的 有才添加
+            search_dict = {
+                'search_field': search_field,
+                'kw': kw,
+            }
+            # 搜索条件
+            if search_field == 'day_num':
+                try:
+                    kw = int(kw.strip())
+                except Exception:
+                    kw = None
+                course_record_objs = course_record_objs.filter(**{search_field: kw})
+
+        per_page_count = settings.PER_PAGE_COUNT  # per_page_count每页加载的客户数量
+        page_range_count = settings.PAGE_RANGE_COUNT  # page_range_count分页组件加载的页码数
+        page_num = request.GET.get('page')  # page_num当前请求的页码数
+        total_count = course_record_objs.count()  # total_count 搜索条件下客户的总个数
+        shang, yu = divmod(total_count, per_page_count)
+        if yu:
+            total_page = shang + 1  # total_page总页码数
+        else:
+            total_page = shang
+        try:
+            page_num = int(page_num)  # 先转成int型 如果输入的不是数字就把它转成1
+        except Exception:
+            page_num = 1
+        if page_num <= 0:  # 如果输入的页码过小重置
+            page_num = 1
+        elif page_num > total_page:  # 如果输入的页码过大重置
+            page_num = total_page
+
+        html = MyPagination(request, page_num, total_page, page_range_count).get_html()  # 分页组件
+        # 把最后的结果根据时间倒序排列 [0:10]每次取出10个 这里如果数值超出了索引不会报错...
+        if course_record_objs:  # 如果没有搜索条件匹配的结果就不用取索引了 否则会报错
+            course_record_objs = course_record_objs.order_by('id')[
+                              (page_num - 1) * per_page_count:page_num * per_page_count]
+
+    elif request.method == 'POST':
+        cids = request.POST.getlist('cids')  # 注意这里是getlist
+        option = request.POST.get('options')
+        if option == 'bulk_create_study_records' and cids:
+            # 批量生成学习记录 只需要传两个参数 一个是课程 一个是学员
+            for cid in cids:
+                course_record_obj_to_bulk = models.CourseRecord.objects.filter(id=int(cid)).first()
+                student_objs = models.Customer.objects.filter(class_list__id=course_record_obj_to_bulk.re_class.id)
+                # 还能这么用 判断某个字段不为空__isnull=False
+                print(student_objs)
+                bulk_list = []
+                for student_obj in student_objs:
+                    bulk_list.append(models.StudyRecord(
+                        student=student_obj,
+                        course_record=course_record_obj_to_bulk,
+                    ))
+                models.StudyRecord.objects.bulk_create(bulk_list)
+            # 返回当前url（携带GET查询条件 相当于只是把POST变成了GET）
+        return redirect(request.get_full_path())
+
+    context = {
+        'course_record_objs': course_record_objs,
+        'content_title': '课程记录',
+        'pagination': html,
+    }
+    # 保留搜索条件
+    if request.GET.get('search_field') and request.GET.get('kw'):
+        context.update(search_dict)
+    return render(request, 'course_records.html', context=context)
+
+
 # 添加和编辑报名记录
 def add_edit_enrollment(request, eid=None):
     # bug : 如果将某条记录删除了 再次添加联合字段相同的记录时 会添加不了

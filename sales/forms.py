@@ -3,7 +3,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.forms import BooleanField
 
-from sales.models import Customer, ConsultRecord, Enrollment, ClassList
+from sales import models
 from multiselectfield.forms.fields import MultiSelectFormField
 
 
@@ -11,7 +11,7 @@ from multiselectfield.forms.fields import MultiSelectFormField
 class EnrollmentForm(forms.ModelForm):
     # 如何根据用户选择的校区动态生成该校区的课程信息？？？
     class Meta:
-        model = Enrollment
+        model = models.Enrollment
         fields = '__all__'
         exclude = ('delete_status',)
 
@@ -22,13 +22,13 @@ class EnrollmentForm(forms.ModelForm):
             if not isinstance(field, BooleanField):
                 field.widget.attrs.update({'class': 'form-control'})
             if field_name == 'customer':
-                field.queryset = Customer.objects.filter(consultant=request.user_obj)
+                field.queryset = models.Customer.objects.filter(consultant=request.user_obj)
 
 
 # 客户跟进信息的ModelForm
 class ConsultRecordForm(forms.ModelForm):
     class Meta:
-        model = ConsultRecord
+        model = models.ConsultRecord
         fields = '__all__'
         exclude = ('delete_status',)
         error_messages = {
@@ -45,7 +45,7 @@ class ConsultRecordForm(forms.ModelForm):
                 field.widget.attrs.update({'class': 'form-control'})
             # 跟进人应该默认为当前登录用户...只能把request传进来才能取出当前登录用户 field.queryset
             if field_name == 'customer':
-                field.queryset = Customer.objects.filter(consultant=request.user_obj)
+                field.queryset = models.Customer.objects.filter(consultant=request.user_obj)
             # 还有跟进客户必须是自己的私户才对... 并且去掉第一项----------------------------------
             if field_name == 'consultant':
                 # field.queryset = UserInfo.objects.filter(id=request.user_obj.id)
@@ -55,7 +55,7 @@ class ConsultRecordForm(forms.ModelForm):
 # 添加客户页面的ModelForm ModelForm要指定model 直接自动帮你生成 你只需要修改
 class CustomerForm(forms.ModelForm):
     class Meta:
-        model = Customer
+        model = models.Customer
         fields = '__all__'
         error_messages = {
             'qq': {'required': 'QQ号码不能为空！！！'},

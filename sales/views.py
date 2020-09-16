@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect, HttpResponse, reverse
 from django.conf import settings
 
-from sales.forms import RegisterForm, CustomerForm, ConsultRecordForm, EnrollmentForm
-from sales.models import UserInfo, Customer, ConsultRecord, Enrollment
+from sales import forms
+from sales import models
 from sales.utils.hashlib_func import set_md5
 from sales.utils.page import MyPagination
 # Create your views here.
@@ -15,11 +15,11 @@ def add_edit_enrollment(request, eid=None):
         content_title = '编辑报名信息'
     else:
         content_title = '添加报名信息'
-    enrollment_obj = Enrollment.objects.filter(id=eid).first()
+    enrollment_obj = models.Enrollment.objects.filter(id=eid).first()
     if request.method == 'GET':
-        form_obj = EnrollmentForm(request, instance=enrollment_obj)  # 如果是添加客户 则实例化一个空对象
+        form_obj = forms.EnrollmentForm(request, instance=enrollment_obj)  # 如果是添加客户 则实例化一个空对象
     elif request.method == 'POST':
-        form_obj = EnrollmentForm(request, request.POST, instance=enrollment_obj)  # 如果是添加客户则instance是None
+        form_obj = forms.EnrollmentForm(request, request.POST, instance=enrollment_obj)  # 如果是添加客户则instance是None
         if form_obj.is_valid():
             form_obj.save()
             if eid:
@@ -38,7 +38,7 @@ def add_edit_enrollment(request, eid=None):
 # 查看报名记录 复制粘贴照葫芦画瓢
 def enrollments(request):
     # 只能查看当前用户的私户的所有状态为未删除的报名信息
-    enrollment_objs = Enrollment.objects.filter(customer__consultant=request.user_obj, delete_status=False)
+    enrollment_objs = models.Enrollment.objects.filter(customer__consultant=request.user_obj, delete_status=False)
     if request.method == 'GET':
         search_field = request.GET.get('search_field')
         kw = request.GET.get('kw')
@@ -103,11 +103,11 @@ def add_edit_consult_record(request, rid=None):
         content_title = '编辑跟进信息'
     else:
         content_title = '添加跟进信息'
-    consult_obj = ConsultRecord.objects.filter(id=rid).first()
+    consult_obj = models.ConsultRecord.objects.filter(id=rid).first()
     if request.method == 'GET':
-        form_obj = ConsultRecordForm(request, instance=consult_obj)  # 如果是添加客户 则实例化一个空对象
+        form_obj = forms.ConsultRecordForm(request, instance=consult_obj)  # 如果是添加客户 则实例化一个空对象
     elif request.method == 'POST':
-        form_obj = ConsultRecordForm(request, request.POST, instance=consult_obj)  # 如果是添加客户则instance是None
+        form_obj = forms.ConsultRecordForm(request, request.POST, instance=consult_obj)  # 如果是添加客户则instance是None
         if form_obj.is_valid():
             form_obj.save()
             if rid:
@@ -126,7 +126,7 @@ def add_edit_consult_record(request, rid=None):
 # 跟进记录  直接展示跟进内容 如果很长的话页面样式会很乱。
 def consult_record(request):
     # 只能查看当前用户的私户的所有状态为未删除的跟进记录
-    consult_record_objs = ConsultRecord.objects.filter(customer__consultant=request.user_obj, delete_status=False)
+    consult_record_objs = models.ConsultRecord.objects.filter(customer__consultant=request.user_obj, delete_status=False)
     if request.method == 'GET':
         cid = request.GET.get('cid')
         search_field = request.GET.get('search_field')
@@ -192,11 +192,11 @@ def add_edit_customer(request, cid=None):  # 编辑客户时需要带id值 当�
         content_title = '编辑客户'
     else:
         content_title = '添加客户'
-    customer_obj = Customer.objects.filter(id=cid).first()  # 如果是添加则customer_obj 是 None
+    customer_obj = models.Customer.objects.filter(id=cid).first()  # 如果是添加则customer_obj 是 None
     if request.method == 'GET':
-        form_obj = CustomerForm(instance=customer_obj)  # 如果是添加客户 则实例化一个空对象
+        form_obj = forms.CustomerForm(instance=customer_obj)  # 如果是添加客户 则实例化一个空对象
     elif request.method == 'POST':
-        form_obj = CustomerForm(request.POST, instance=customer_obj)  # 如果是添加客户则instance是None
+        form_obj = forms.CustomerForm(request.POST, instance=customer_obj)  # 如果是添加客户则instance是None
         if form_obj.is_valid():
             form_obj.save()
             if cid:
@@ -220,7 +220,7 @@ def customers(request):
         cids = request.POST.getlist('cids')  # 注意这里要用getlist！！！
         u_obj = request.user_obj
         if option and cids:
-            c_objs = Customer.objects.filter(id__in=cids)
+            c_objs = models.Customer.objects.filter(id__in=cids)
             if option == 'reverse_gs':
                 # 公转私要考虑多用户同时操作 判断queryset中每一个object的consultant的值是否为None queryset才有update方法
                 # 当客户的consultant不为空时如何增加一个提示让用户知道该客户已经被选择了？？？可以返回一个提示页面 或者你用Ajax
@@ -239,13 +239,13 @@ def customers(request):
         # 如果是GET请求则展示客户 也可以封装成一个类。
         if request.path == reverse('customers'):
             # 如果是customer这个url过来的请求 就只能查看公户信息
-            customers_obj = Customer.objects.filter(consultant=None)
+            customers_obj = models.Customer.objects.filter(consultant=None)
             content_title = '所有公户'  # 这里是content内容的标题
         else:
             content_title = '我的客户'
             # 如果是my_customer这个url过来的请求 就只能查看私户信息
             user_obj = request.user_obj
-            customers_obj = Customer.objects.filter(consultant=user_obj)
+            customers_obj = models.Customer.objects.filter(consultant=user_obj)
         search_field = request.GET.get('search_field')
         kw = request.GET.get('kw')  # 搜索条件
         if kw and search_field:
@@ -301,9 +301,9 @@ def login(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
         # 用.get会报错
-        if UserInfo.objects.filter(username=username, password=set_md5(password)):
+        if models.UserInfo.objects.filter(username=username, password=set_md5(password)):
             # 登录成功 将用户信息保存到session中
-            request.session['user_id'] = UserInfo.objects.get(username=username, password=set_md5(password)).id
+            request.session['user_id'] = models.UserInfo.objects.get(username=username, password=set_md5(password)).id
             return redirect('customers')
         else:
             context = {
@@ -316,17 +316,17 @@ def login(request):
 def register(request):
     if request.method == "GET":
         context = {
-            'form': RegisterForm,
+            'form': forms.RegisterForm,
         }
     elif request.method == 'POST':
-        form_obj = RegisterForm(request.POST)
+        form_obj = forms.RegisterForm(request.POST)
         context = {
             'form': form_obj,
         }
         if form_obj.is_valid():
             form_obj.cleaned_data.pop('r_password')
             form_obj.cleaned_data['password'] = set_md5(form_obj.cleaned_data['password'])
-            UserInfo.objects.create(
+            models.UserInfo.objects.create(
                 **form_obj.cleaned_data,  # 直接**打散可以把字典变成赋值的形式
             )
             return redirect('login')

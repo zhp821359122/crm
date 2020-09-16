@@ -15,34 +15,34 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from sales.views import login, register, customers, add_edit_customer, consult_record, add_edit_consult_record, enrollments, add_edit_enrollment
+from sales import views
 
 urlpatterns = [
     # 编辑报名记录
-    url(r'^edit_enrollment/(\d+)', add_edit_enrollment, name='edit_enrollment'),
+    url(r'^edit_enrollment/(\d+)', views.add_edit_enrollment, name='edit_enrollment'),
     # 添加报名记录
-    url(r'^add_enrollment/', add_edit_enrollment, name='add_enrollment'),
+    url(r'^add_enrollment/', views.add_edit_enrollment, name='add_enrollment'),
     # 查看报名记录 一样的
-    url(r'^enrollments/', enrollments, name='enrollments'),
+    url(r'^enrollments/', views.enrollments, name='enrollments'),
     # 编辑跟进记录 和客户一样是同一个视图进行处理
-    url(r'^edit_consult_record/(\d+)', add_edit_consult_record, name='edit_consult_record'),
+    url(r'^edit_consult_record/(\d+)', views.add_edit_consult_record, name='edit_consult_record'),
     # 添加跟进记录
-    url(r'^add_consult_record/', add_edit_consult_record, name='add_consult_record'),
+    url(r'^add_consult_record/', views.add_edit_consult_record, name='add_consult_record'),
     # 跟进记录展示
-    url(r'^consult_record/', consult_record, name='consult_record'),
+    url(r'^consult_record/', views.consult_record, name='consult_record'),
     # 我的客户 走的也是customer视图逻辑一样 就是url不同
-    url(r'^my_customers/', customers, name='my_customers'),
+    url(r'^my_customers/', views.customers, name='my_customers'),
     # 编辑客户 两个url同时匹配同一个视图函数进行处理
-    url(r'^edit_customer/(\d+)', add_edit_customer, name='edit_customer'),
+    url(r'^edit_customer/(\d+)', views.add_edit_customer, name='edit_customer'),
     #  添加客户
-    url(r'^add_customer/', add_edit_customer, name='add_customer'),
+    url(r'^add_customer/', views.add_edit_customer, name='add_customer'),
     #  展示客户
-    url(r'^customers/', customers, name='customers'),
+    url(r'^customers/', views.customers, name='customers'),
 
-    url(r'^login/$', login, name='login'),
-    url(r'^$', login, name='login'),
+    url(r'^login/$', views.login, name='login'),
+    url(r'^$', views.login, name='login'),
 
-    url(r'^register/$', register, name='register'),
+    url(r'^register/$', views.register, name='register'),
 
     url(r'^admin/', admin.site.urls),
 ]

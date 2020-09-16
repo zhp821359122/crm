@@ -24,22 +24,22 @@ enroll_status_choices = (
     ('studying', '学习中'),
     ('paid_in_full', '交全学费'),
 )
-# 下面这些暂时用不到：
-# score_choices = (
-#     (100, 'A+'),
-#     (90, 'A'),
-#     (85, 'B+'),
-#     (80, 'B'),
-#     (70, 'B-'),
-#     (60, 'C+'),
-#     (50, 'C'),
-#     (40, 'C-'),
-#     (0, 'D'),
-#     (-1, 'N/A'),
-#     (-100, 'COPY'),
-#     (-1000, 'FAIL'),
-# )
-#
+
+score_choices = (
+    (100, 'A+'),
+    (90, 'A'),
+    (85, 'B+'),
+    (80, 'B'),
+    (70, 'B-'),
+    (60, 'C+'),
+    (50, 'C'),
+    (40, 'C-'),
+    (0, 'D'),
+    (-1, 'N/A'),
+    (-100, 'COPY'),
+    (-1000, 'FAIL'),
+)
+
 seek_status_choices = (
     ('A', '近期无报名计划'),
     ('B', '1个月内报名'),
@@ -57,13 +57,49 @@ seek_status_choices = (
 #     ('dropout', '退学'),
 #     ('refund', '退款'),
 # )
-# attendance_choices = (
-#     ('checked', '已签到'),
-#     ('vacate', '请假'),
-#     ('late', '迟到'),
-#     ('absence', '缺勤'),
-#     ('leave_early', '早退'),
-# )
+attendance_choices = (
+    ('checked', '已签到'),
+    ('vacate', '请假'),
+    ('late', '迟到'),
+    ('absence', '缺勤'),
+    ('leave_early', '早退'),
+)
+
+
+class CourseRecord(models.Model):
+    """
+    课程记录表
+    """
+    day_num = models.IntegerField('节次', help_text='此处填写第几节课或者第几天课程...必须为数字')
+    date = models.DateField(auto_now_add=True, verbose_name='上课时间')
+    course_title = models.CharField('本节课程标题', max_length=64, blank=True, null=True)
+    course_memo = models.TextField('本节课程内容', max_length=300, blank=True, null=True)
+    has_homework = models.BooleanField(default=True, verbose_name='本节课有作业')
+    homework_title = models.CharField('本节作业标题', max_length=64, blank=True, null=True)
+    homework_memo = models.TextField('作业描述', max_length=500, blank=True, null=True)
+    scoring_point = models.TextField('得分点', max_length=300, blank=True, null=True)
+    re_class = models.ForeignKey('ClassList', verbose_name='班级')
+    teacher = models.ForeignKey('UserInfo', verbose_name='讲师')
+
+    class Meta:
+        unique_together = ('re_class', 'day_num')
+
+
+class StudyRecord(models.Model):
+    """
+    学习记录表
+    """
+    attendance = models.CharField('考勤', choices=attendance_choices, default='checked', max_length=64)
+    score = models.IntegerField('本节成绩', choices=score_choices, default=1)
+    homework_note = models.CharField(max_length=255, verbose_name='作业批语', blank=True, null=True)
+    date = models.DateTimeField(auto_now_add=True)
+    note = models.CharField('备注', max_length=255, blank=True, null=True)
+    homework = models.FileField(verbose_name='作业文件', blank=True, null=True)
+    course_record = models.ForeignKey('ConsultRecord', verbose_name='某节课程')
+    student = models.ForeignKey('Customer', verbose_name='学员')
+
+    class Meta:
+        unique_together = ('course_record', 'student')
 
 
 class Enrollment(models.Model):

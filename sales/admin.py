@@ -1,16 +1,16 @@
 from django.contrib import admin
-from sales.models import Campuses, ClassList, Customer, UserInfo, ConsultRecord, Enrollment, Department
+from sales import models
 # Register your models here.
 
 
-@admin.register(Customer)
+@admin.register(models.Customer)
 class CustomerAdmin(admin.ModelAdmin):
     list_display = ('qq', 'name', 'status', 'consultant')
 
 
-admin.site.register(Campuses)
-admin.site.register(ClassList)
-admin.site.register(UserInfo)
-admin.site.register(ConsultRecord)
-admin.site.register(Enrollment)
-admin.site.register(Department)
+admin.site.register(models.Campuses)
+admin.site.register(models.ClassList)
+admin.site.register(models.UserInfo)
+admin.site.register(models.ConsultRecord)
+admin.site.register(models.Enrollment)
+admin.site.register(models.Department)

@@ -220,13 +220,20 @@ def customers(request):
         cids = request.POST.getlist('cids')  # 注意这里要用getlist！！！
         u_obj = request.user_obj
         if option and cids:
-            c_obj = Customer.objects.filter(id__in=cids)
+            c_objs = Customer.objects.filter(id__in=cids)
             if option == 'reverse_gs':
-                # 公转私
-                c_obj.update(consultant=u_obj)
+                # 公转私要考虑多用户同时操作 判断queryset中每一个object的consultant的值是否为None queryset才有update方法
+                # 当客户的consultant不为空时如何增加一个提示让用户知道该客户已经被选择了？？？可以返回一个提示页面 或者你用Ajax
+                if c_objs.filter(consultant=None).count() == len(cids):
+                    c_objs.update(consultant=request.user_obj)
+                elif not c_objs.filter(consultant=None):
+                    return HttpResponse('您选择的所有客户已经被他人选择！！！')
+                else:
+                    c_objs.filter(consultant=None).update(consultant=request.user_obj)
+                    return HttpResponse('您选择的客户中有些客户已经被他人选择')
             else:
                 # 私转公
-                c_obj.update(consultant=None)
+                c_objs.update(consultant=None)
         return redirect(request.get_full_path())  # 转换后直接返回至原来页面 第几页和查询条件都不变 牛逼啊
     else:
         # 如果是GET请求则展示客户 也可以封装成一个类。

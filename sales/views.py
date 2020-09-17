@@ -203,6 +203,9 @@ def course_records(request):
                     models.StudyRecord.objects.bulk_create(bulk_list)
                 except Exception:
                     return HttpResponse('所选课程中存在已创建学习记录的课程，请勿重复创建学习记录！！！')
+        elif option == 'delete_course_record' and cids:
+            # 删除课程记录  这里涉及到了级联删除 前面设置了级联删除...
+            models.CourseRecord.objects.filter(id__in=cids).delete()
             # 返回当前url（携带GET查询条件 相当于只是把POST变成了GET）
         return redirect(request.get_full_path())
 

@@ -7,14 +7,14 @@
     <form class="form-inline pull-right" style="margin-bottom: 10px" method="get">
     <select class="form-control" name="search_field" >
        <option value="">选择搜索字段</option>
-        {% if search_field == 'course' %}
-             <option value="course" selected>班级</option>
-             <option value="name">客户名称</option>
-            {% elif search_field == 'name' %}
-            <option value="course" >班级</option>
+        {% if search_field == 'name' %}
+            <option value="qq">QQ</option>
              <option value="name" selected>客户名称</option>
+            {% elif  search_field == 'qq'%}
+             <option value="qq" selected>QQ</option>
+             <option value="name">客户名称</option>
             {% else %}
-             <option value="course" >班级</option>
+              <option value="qq">QQ</option>
              <option value="name">客户名称</option>
         {% endif %}
 </select>
@@ -25,16 +25,17 @@
   <button type="submit" class="btn btn-default">搜索</button>
 </form>
 
-
+    <span style="color: red;">{{ form_set.errors }}</span>
      <form  action="" style="margin-bottom: 10px;" method="post">
      {% csrf_token %}
+     {{ form_set.management_form }}
         <div class="form-inline pull-left">
             <select class="form-control" name="options" >
-            <option >选择操作</option>
-                    <option value="delete_enrollment" >删除记录</option>
+            <option>选择操作</option>
+                <option value="delete_record" >删除学习记录</option>
 </select>&nbsp;
     <button class="btn btn-danger">GO</button>&nbsp;
-     <a href="{% url 'add_enrollment' %}"><button type="button" class=" btn btn-primary">添加报名记录</button></a>
+     <a href="/add_study_record/{{ course_record_id }}" ><button type="button" class=" btn btn-primary">添加学习记录</button></a>
         </div>
 
 
@@ -42,27 +43,28 @@
 
     <tr class="active">
         <th><input type="checkbox" id="select_all"> 序号</th>
-        <th>客户名称</th>
-        <th>校区</th>
-        <th>班级</th>
-        <th>报名日期</th>
-        <th>是否审批通过</th>
-        <th>操作</th>
+        <th>课程</th>
+        <th>学员</th>
+        <th>本节成绩</th>
+        <th>考勤</th>
+        <th>作业批语</th>
     </tr>
-    {% for enrollment_obj in enrollment_objs %}
+    {% for form in form_set %}
         <tr class="active">
-            <td><input type="checkbox" name="eids" value="{{ enrollment_obj.pk }}" > {{ forloop.counter }}</td>
-            <td>{{ enrollment_obj.customer.name }}</td>
-            <td>{{ enrollment_obj.school }}</td>
-            <td>{{ enrollment_obj.enrolment_class.get_course_display }}</td>
-            <td>{{ enrollment_obj.enrolled_date }}</td>
-            <td>{{ enrollment_obj.contract_approved }}</td>
-            <td><li class="fa fa-edit"><a href="{% url 'edit_enrollment' enrollment_obj.pk %}?next={{ request.get_full_path }}">编辑</a></li></td>
+            <td><input type="checkbox" name="rids" value="{{ form.pk }}" > {{ forloop.counter }}</td>
+            {{ form.id }}
+            <td class="hide">{{ form.course_record }}</td>
+            <td class="hide">{{ form.student }}</td>
+            <td>{{ form.instance.course_record }}</td>
+            <td>{{ form.instance.student }}</td>
+            <td>{{ form.score }}</td>
+            <td>{{ form.attendance }}</td>
+            <td>{{ form.homework_note }}</td>
         </tr>
     {% endfor %}
 
 </table>
-
+<button class="btn-lg btn-primary pull-right" style="width:150px;margin-right: 50px;">提交</button>
     {{ pagination }}
           </form>
    {% comment %} <nav aria-label="Page navigation">
@@ -91,12 +93,12 @@
     <script>
         {#让checkbox反选#}
         $('#select_all').on('click',function () {
-            for(i=0; i<$(':checkbox[name="eids"]').length; i++){
-                if(jQuery($(':checkbox[name="eids"]')[i]).prop('checked')){
+            for(i=0; i<$(':checkbox[name="rids"]').length; i++){
+                if(jQuery($(':checkbox[name="rids"]')[i]).prop('checked')){
                     console.log('test');
-                    jQuery($(':checkbox[name="eids"]')[i]).prop('checked', false);
+                    jQuery($(':checkbox[name="rids"]')[i]).prop('checked', false);
                 }else{
-                    jQuery($(':checkbox[name="eids"]')[i]).prop('checked', true);
+                    jQuery($(':checkbox[name="rids"]')[i]).prop('checked', true);
                 }
             }
         })

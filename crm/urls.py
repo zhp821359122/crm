@@ -18,6 +18,9 @@ from django.contrib import admin
 from sales import views
 
 urlpatterns = [
+    # 学习记录
+    url(r'^study_records/(\d+)', views.study_records, name='study_records'),
+
     # 编辑课程记录
     url(r'^edit_course_record/(\d+)', views.add_edit_course_record, name='edit_course_record'),
     # 添加课程记录

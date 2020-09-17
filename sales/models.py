@@ -87,7 +87,7 @@ class CourseRecord(models.Model):
         verbose_name_plural = '课程记录表'
 
     def __str__(self):
-        return self.re_class.course + str(self.re_class.semester) + ':' + str(self.day_num)
+        return self.re_class.course + '第' + str(self.re_class.semester) + '期:第' + str(self.day_num) + '节课'
 
 
 class StudyRecord(models.Model):

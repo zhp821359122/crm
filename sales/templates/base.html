@@ -151,7 +151,7 @@
     <!-- Brand Logo -->
     <a href="{% url 'customers' %}" class="brand-link">
       <img src="{% static 'dist/img/AdminLTELogo.png' %}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-      <span class="brand-text font-weight-light">AdminLTE 3</span>
+      <span class="brand-text font-weight-light">客户关系管理</span>
     </a>
 
     <!-- Sidebar -->
@@ -167,16 +167,16 @@
       </div>
 
       <!-- SidebarSearch Form -->
-      <div class="form-inline">
-        <div class="input-group" data-widget="sidebar-search">
-          <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
-          <div class="input-group-append">
-            <button class="btn btn-sidebar">
-              <i class="fa fa-search fa-fw"></i>
-            </button>
-          </div>
-        </div>
-      </div>
+{#      <div class="form-inline">#}
+{#        <div class="input-group" data-widget="sidebar-search">#}
+{#          <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">#}
+{#          <div class="input-group-append">#}
+{#            <button class="btn btn-sidebar">#}
+{#              <i class="fa fa-search fa-fw"></i>#}
+{#            </button>#}
+{#          </div>#}
+{#        </div>#}
+{#      </div>#}
 
       <!-- Sidebar Menu -->
       <nav class="mt-2">
@@ -215,25 +215,25 @@
             </li>
 
 
-          <li class="nav-item menu-open ">
-            <a href="#" class="nav-link ">
-              <i class="fa fa-reorder"></i>
-                &nbsp;
-              <p>
-                Starter Pages
-                <i class="right fa fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="fa fa-circle nav-icon"></i>
-                  <p>Active Page</p>
-                </a>
-              </li>
-
-            </ul>
-          </li>
+{#          <li class="nav-item menu-open ">#}
+{#            <a href="#" class="nav-link ">#}
+{#              <i class="fa fa-reorder"></i>#}
+{#                &nbsp;#}
+{#              <p>#}
+{#                Starter Pages#}
+{#                <i class="right fa fa-angle-left"></i>#}
+{#              </p>#}
+{#            </a>#}
+{#            <ul class="nav nav-treeview">#}
+{#              <li class="nav-item">#}
+{#                <a href="#" class="nav-link">#}
+{#                  <i class="fa fa-circle nav-icon"></i>#}
+{#                  <p>Active Page</p>#}
+{#                </a>#}
+{#              </li>#}
+{##}
+{#            </ul>#}
+{#          </li>#}
 
         </ul>
       </nav>
@@ -324,7 +324,7 @@
     {#这里定义的列表是为了保证在跳转到该栏目的子页面时该栏目仍然高亮#}
     consult_record_urls = ['consult_record', 'add_consult_record', 'edit_consult_record']
     enrollment_record_urls = ['enrollments', 'add_enrollment', 'edit_enrollment']
-    course_record_urls = ['course_records', 'add_course_record', 'edit_course_record']
+    course_record_urls = ['course_records', 'add_course_record', 'edit_course_record', 'study_records', 'add_study_record']
     {#这里是按/分割 所以注意在配置路由的时候后面有无/还是有区别的#}
     url = location.href.split('/')[3];
     if(url=='my_customers'){

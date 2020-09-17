@@ -93,12 +93,12 @@
     <script>
         {#让checkbox反选#}
         $('#select_all').on('click',function () {
-            for(i=0; i<$(':checkbox[name="cids"]').length; i++){
-                if(jQuery($(':checkbox[name="cids"]')[i]).prop('checked')){
+            for(i=0; i<$(':checkbox[name="rids"]').length; i++){
+                if(jQuery($(':checkbox[name="rids"]')[i]).prop('checked')){
                     console.log('test');
-                    jQuery($(':checkbox[name="cids"]')[i]).prop('checked', false);
+                    jQuery($(':checkbox[name="rids"]')[i]).prop('checked', false);
                 }else{
-                    jQuery($(':checkbox[name="cids"]')[i]).prop('checked', true);
+                    jQuery($(':checkbox[name="rids"]')[i]).prop('checked', true);
                 }
             }
         })

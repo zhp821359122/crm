@@ -6,6 +6,7 @@ from sales import models
 @admin.register(models.Customer)
 class CustomerAdmin(admin.ModelAdmin):
     list_display = ('qq', 'name', 'status', 'consultant')
+    list_editable = ('name', 'status', 'consultant')
 
 
 admin.site.register(models.StudyRecord)

@@ -1,11 +1,53 @@
 from django.shortcuts import render, redirect, HttpResponse, reverse
 from django.conf import settings
+from django.forms.models import modelformset_factory
 
 from sales import forms
 from sales import models
 from sales.utils.hashlib_func import set_md5
 from sales.utils.page import MyPagination
 # Create your views here.
+
+
+# 查看学习记录  添加学习记录由于formset不能接受modelform初始化的参数...所以暂时不能单独做 真的很棘手先不处理
+def study_records(request, course_record_id):
+    # 使用modelformset批量编辑保存  分页的话一样的form_set[:1] 主要是要统计出数量
+    # 想要排序的话不能直接操作ModelFormSet但是可以先把queryset排序了 如下：
+    study_record_objs = models.StudyRecord.objects.filter(course_record__id=course_record_id).order_by('-id')
+    form_set = modelformset_factory(model=models.StudyRecord, form=forms.StudyRecordForm, extra=0)
+    # 由于分页是把formset变成了list类型 会丢失management_form等属性 这里暂时不分页了
+    if request.method == 'GET':
+        form_set = form_set(queryset=study_record_objs)  # 这里为啥不能用.id
+    elif request.method == 'POST':
+        form_set = form_set(request.POST)
+        if form_set.is_valid():
+            form_set.save()
+            return redirect(request.get_full_path())
+    # per_page_count = settings.PER_PAGE_COUNT  # per_page_count每页加载的客户数量
+    # page_range_count = settings.PAGE_RANGE_COUNT  # page_range_count分页组件加载的页码数
+    # page_num = request.GET.get('page')  # page_num当前请求的页码数
+    # total_count = study_record_objs.count()  # total_count 搜索条件下客户的总个数
+    # shang, yu = divmod(total_count, per_page_count)
+    # if yu:
+    #     total_page = shang + 1  # total_page总页码数
+    # else:
+    #     total_page = shang
+    # try:
+    #     page_num = int(page_num)  # 先转成int型 如果输入的不是数字就把它转成1
+    # except Exception:
+    #     page_num = 1
+    # if page_num <= 0:  # 如果输入的页码过小重置
+    #     page_num = 1
+    # elif page_num > total_page:  # 如果输入的页码过大重置
+    #     page_num = total_page
+    #
+    # html = MyPagination(request, page_num, total_page, page_range_count).get_html()  # 分页组件
+    # form_set = form_set[(page_num - 1) * per_page_count:page_num * per_page_count]
+    context = {
+        'form_set': form_set,
+        'content_title': '学习记录',
+    }
+    return render(request, 'study_records.html', context=context)
 
 
 # 添加和编辑课程记录
@@ -76,7 +118,7 @@ def course_records(request):
         html = MyPagination(request, page_num, total_page, page_range_count).get_html()  # 分页组件
         # 把最后的结果根据时间倒序排列 [0:10]每次取出10个 这里如果数值超出了索引不会报错...
         if course_record_objs:  # 如果没有搜索条件匹配的结果就不用取索引了 否则会报错
-            course_record_objs = course_record_objs.order_by('id')[
+            course_record_objs = course_record_objs.order_by('-id')[
                               (page_num - 1) * per_page_count:page_num * per_page_count]
 
     elif request.method == 'POST':
@@ -85,17 +127,22 @@ def course_records(request):
         if option == 'bulk_create_study_records' and cids:
             # 批量生成学习记录 只需要传两个参数 一个是课程 一个是学员
             for cid in cids:
-                course_record_obj_to_bulk = models.CourseRecord.objects.filter(id=int(cid)).first()
-                student_objs = models.Customer.objects.filter(class_list__id=course_record_obj_to_bulk.re_class.id)
-                # 还能这么用 判断某个字段不为空__isnull=False
-                print(student_objs)
+                cid = int(cid)
+                course_record_obj_to_bulk = models.CourseRecord.objects.filter(id=cid).first()
+                # student_objs = models.Customer.objects.filter(class_list__id=course_record_obj_to_bulk.re_class.id)
+                # 注意这里必须带一个filter 不然会报错 判断某个字段不为空__isnull=False
+                student_objs = course_record_obj_to_bulk.re_class.customer_set.filter(status='studying')
                 bulk_list = []
                 for student_obj in student_objs:
                     bulk_list.append(models.StudyRecord(
                         student=student_obj,
                         course_record=course_record_obj_to_bulk,
                     ))
-                models.StudyRecord.objects.bulk_create(bulk_list)
+                try:
+                    # 如果重复选择了课程就返回一个页面告知一下
+                    models.StudyRecord.objects.bulk_create(bulk_list)
+                except Exception:
+                    return HttpResponse('所选课程中存在已创建学习记录的课程，请勿重复创建学习记录！！！')
             # 返回当前url（携带GET查询条件 相当于只是把POST变成了GET）
         return redirect(request.get_full_path())
 
@@ -190,7 +237,7 @@ def enrollments(request):
 
     context = {
         'enrollment_objs': enrollment_objs,
-        'content_title': '跟进记录',
+        'content_title': '报名记录',
         'pagination': html,
     }
     # 保留搜索条件

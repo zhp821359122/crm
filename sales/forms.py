@@ -1,10 +1,17 @@
 import re
 from django import forms
 from django.core.exceptions import ValidationError
-from django.forms import BooleanField
+from django.forms import BooleanField, FileField
 
 from sales import models
 from multiselectfield.forms.fields import MultiSelectFormField
+
+
+# 学习记录表的ModelForm 用来给ModelFormSet传参
+class StudyRecordForm(forms.ModelForm):
+    class Meta:
+        model = models.StudyRecord
+        fields = '__all__'
 
 
 # 课程信息表的ModelForm

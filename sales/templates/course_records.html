@@ -55,7 +55,7 @@
             <td>{{ course_record_obj.homework_title }}</td>
             <td>{{ course_record_obj.teacher.username }}</td>
             <td>{{ course_record_obj.date }}</td>
-            <td><a href="{% url 'consult_record' %}?cid={{ course_record_obj.pk }}">查看详情</a></td>
+            <td><a href="{% url 'study_records' course_record_obj.pk %}">查看详情</a></td>
             <td><li class="fa fa-edit"><a href="{% url 'edit_course_record' course_record_obj.pk %}?next={{ request.get_full_path }}">编辑</a></li></td>
         </tr>
     {% endfor %}

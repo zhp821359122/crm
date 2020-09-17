@@ -15,38 +15,55 @@ def study_records(request, course_record_id):
     # 想要排序的话不能直接操作ModelFormSet但是可以先把queryset排序了 如下：
     study_record_objs = models.StudyRecord.objects.filter(course_record__id=course_record_id).order_by('-id')
     form_set = modelformset_factory(model=models.StudyRecord, form=forms.StudyRecordForm, extra=0)
-    # 由于分页是把formset变成了list类型 会丢失management_form等属性 这里暂时不分页了
     if request.method == 'GET':
-        form_set = form_set(queryset=study_record_objs)  # 这里为啥不能用.id
+        search_field = request.GET.get('search_field')
+        kw = request.GET.get('kw')
+        if search_field and kw:
+            # 这个是后面添加到context里的 有才添加
+            kw = kw.strip()
+            search_dict = {
+                'search_field': search_field,
+                'kw': kw,
+            }
+            search_field = 'student__name__contains'
+            study_record_objs = study_record_objs.filter(**{search_field: kw})
+
     elif request.method == 'POST':
         form_set = form_set(request.POST)
         if form_set.is_valid():
             form_set.save()
-            return redirect(request.get_full_path())
-    # per_page_count = settings.PER_PAGE_COUNT  # per_page_count每页加载的客户数量
-    # page_range_count = settings.PAGE_RANGE_COUNT  # page_range_count分页组件加载的页码数
-    # page_num = request.GET.get('page')  # page_num当前请求的页码数
-    # total_count = study_record_objs.count()  # total_count 搜索条件下客户的总个数
-    # shang, yu = divmod(total_count, per_page_count)
-    # if yu:
-    #     total_page = shang + 1  # total_page总页码数
-    # else:
-    #     total_page = shang
-    # try:
-    #     page_num = int(page_num)  # 先转成int型 如果输入的不是数字就把它转成1
-    # except Exception:
-    #     page_num = 1
-    # if page_num <= 0:  # 如果输入的页码过小重置
-    #     page_num = 1
-    # elif page_num > total_page:  # 如果输入的页码过大重置
-    #     page_num = total_page
-    #
-    # html = MyPagination(request, page_num, total_page, page_range_count).get_html()  # 分页组件
-    # form_set = form_set[(page_num - 1) * per_page_count:page_num * per_page_count]
+            return redirect('course_records')
+    # 由于分页是把formset变成了list类型 会丢失management_form等属性
+    # 分页可以先将models筛选然后再给form_set赋值 因为form_set中有多少model那么form.id就得是多少 这样就实现了分页 太6了 搜索也是同理。
+    per_page_count = settings.PER_PAGE_COUNT  # per_page_count每页加载的客户数量
+    page_range_count = settings.PAGE_RANGE_COUNT  # page_range_count分页组件加载的页码数
+    page_num = request.GET.get('page')  # page_num当前请求的页码数
+    total_count = study_record_objs.count()  # total_count 搜索条件下客户的总个数
+    shang, yu = divmod(total_count, per_page_count)
+    if yu:
+        total_page = shang + 1  # total_page总页码数
+    else:
+        total_page = shang
+    try:
+        page_num = int(page_num)  # 先转成int型 如果输入的不是数字就把它转成1
+    except Exception:
+        page_num = 1
+    if page_num <= 0:  # 如果输入的页码过小重置
+        page_num = 1
+    elif page_num > total_page:  # 如果输入的页码过大重置
+        page_num = total_page
+
+    html = MyPagination(request, page_num, total_page, page_range_count).get_html()  # 分页组件
+    study_record_objs = study_record_objs[(page_num - 1) * per_page_count:page_num * per_page_count]
+    # 最后在设置form_set
+    form_set = form_set(queryset=study_record_objs)  # 这里为啥不能用.id
     context = {
         'form_set': form_set,
         'content_title': '学习记录',
+        'pagination': html,
     }
+    if request.GET.get('search_field') and request.GET.get('kw'):
+        context.update(search_dict)
     return render(request, 'study_records.html', context=context)
 
 

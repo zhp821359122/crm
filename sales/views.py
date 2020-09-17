@@ -54,9 +54,18 @@ def study_records(request, course_record_id):
         page_num = total_page
 
     html = MyPagination(request, page_num, total_page, page_range_count).get_html()  # 分页组件
-    study_record_objs = study_record_objs[(page_num - 1) * per_page_count:page_num * per_page_count]
+    # if study_record_objs:  这样判断会报错 ！！！
+    if study_record_objs.count() != 0:
+        study_record_objs = study_record_objs[
+                            (page_num - 1) * per_page_count:page_num * per_page_count]
+    # try:
+    #     study_record_objs = study_record_objs[
+    #                         (page_num - 1) * per_page_count:page_num * per_page_count]
+    # except Exception:
+    #     pass
+
     # 最后在设置form_set
-    form_set = form_set(queryset=study_record_objs)  # 这里为啥不能用.id
+    form_set = form_set(queryset=study_record_objs)  # 这里为啥不能用.id？？？
     context = {
         'form_set': form_set,
         'content_title': '学习记录',

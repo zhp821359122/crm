@@ -9,7 +9,25 @@ from sales.utils.page import MyPagination
 # Create your views here.
 
 
-# 查看学习记录  添加学习记录由于formset不能接受modelform初始化的参数...所以暂时不能单独做 真的很棘手先不处理
+# 增加学习记录  别忘了还有默认值参数！！！在ModelFormSet的时候不传不就好了
+def add_study_record(request, cid):
+    # 适用场景：新增一名新的学员  手动添加学习记录
+    content_title = '添加学习记录'
+    if request.method == 'GET':
+        form_obj = forms.StudyRecordForm(cid)
+    elif request.method == 'POST':
+        form_obj = forms.StudyRecordForm(cid, request.POST)
+        if form_obj.is_valid():
+            form_obj.save()
+            return redirect('course_records')
+    context = {
+        'form_obj': form_obj,
+        'content_title': content_title,  # base.html中必传的参数
+    }
+    return render(request, 'add_study_record.html', context)
+
+
+# 查看学习记录  添加学习记录由于formset不能接受modelform初始化的参数...所以暂时不能单独做 很棘手先不处理
 def study_records(request, course_record_id):
     # 使用modelformset批量编辑保存  分页的话一样的form_set[:1] 主要是要统计出数量
     # 想要排序的话不能直接操作ModelFormSet但是可以先把queryset排序了 如下：
@@ -70,6 +88,7 @@ def study_records(request, course_record_id):
         'form_set': form_set,
         'content_title': '学习记录',
         'pagination': html,
+        'course_record_id': course_record_id,
     }
     if request.GET.get('search_field') and request.GET.get('kw'):
         context.update(search_dict)

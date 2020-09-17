@@ -13,6 +13,21 @@ class StudyRecordForm(forms.ModelForm):
         model = models.StudyRecord
         fields = '__all__'
 
+    def __init__(self, cid=None, *args, **kwargs):  # 这里的cid要设一个默认值 为的是解决form_set不能传值
+        super(StudyRecordForm, self).__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            if not isinstance(field, MultiSelectFormField) and not isinstance(field, FileField):
+                field.widget.attrs.update({'class': 'form-control'})
+            if cid:  # 只有在添加学习记录时才进行这个操作 否则None报错
+                # 课程应该就为当前课程 cid要在实例化时传进来
+                if field_name == 'course_record':
+                    course_record_obj = models.CourseRecord.objects.filter(id=cid).first()
+                    field.choices = ((course_record_obj.id, course_record_obj),)
+                # 学员必须是该班级的学员 三个表之间的关系要缕清 通过课程id找到班级表对象 然后再根据班级表反向查询该班级下的所有学员re_class.customer_set.all()
+                if field_name == 'student':
+                    course_record_obj = models.CourseRecord.objects.filter(id=cid).first()
+                    field.queryset = course_record_obj.re_class.customer_set.all()
+
 
 # 课程信息表的ModelForm
 class CourseRecordForm(forms.ModelForm):

@@ -47,10 +47,18 @@ def study_records(request, course_record_id):
             study_record_objs = study_record_objs.filter(**{search_field: kw})
 
     elif request.method == 'POST':
-        form_set = form_set(request.POST)
-        if form_set.is_valid():
-            form_set.save()
-            return redirect('course_records')
+        option = request.POST.get('options')
+        print(option)
+        students_id = request.POST.getlist('students_id')
+        if option == 'delete_record' and students_id:
+            # 删除学习记录 我只要拿到student_id还有课程id就行了 不一定要拿学习记录id 通过student_id和课程id找到对应的学习记录
+            models.StudyRecord.objects.filter(student__id__in=students_id, course_record__id=course_record_id).delete()
+        else:
+            # 如果option和students_id存在则删除学习记录 否则执行保存formset的操作
+            form_set = form_set(request.POST)
+            if form_set.is_valid():
+                form_set.save()
+        return redirect('course_records')
     # 由于分页是把formset变成了list类型 会丢失management_form等属性
     # 分页可以先将models筛选然后再给form_set赋值 因为form_set中有多少model那么form.id就得是多少 这样就实现了分页 太6了 搜索也是同理。
     per_page_count = settings.PER_PAGE_COUNT  # per_page_count每页加载的客户数量
@@ -84,7 +92,13 @@ def study_records(request, course_record_id):
 
     # 最后在设置form_set
     form_set = form_set(queryset=study_record_objs)  # 这里为啥不能用.id？？？
+    # 这里传一个flag用来判断是否有展示数据 如果有才显示分页和按钮 优化一下
+    if study_record_objs:
+        flag = True
+    else:
+        flag = False
     context = {
+        'flag': flag,
         'form_set': form_set,
         'content_title': '学习记录',
         'pagination': html,
@@ -92,6 +106,7 @@ def study_records(request, course_record_id):
     }
     if request.GET.get('search_field') and request.GET.get('kw'):
         context.update(search_dict)
+    print(form_set)
     return render(request, 'study_records.html', context=context)
 
 
